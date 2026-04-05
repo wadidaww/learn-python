@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "learn-python"
+version = "0.1.0"
+description = "A comprehensive Python learning ecosystem covering fundamentals through expert topics"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["python", "learning", "algorithms", "design-patterns"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.1",
+    "mypy>=1.5",
+    "black>=23.0",
+    "isort>=5.12",
+]
+backend = [
+    "fastapi>=0.104",
+    "uvicorn[standard]>=0.24",
+    "pydantic>=2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "01_fundamentals/tests",
+    "02_algorithms/tests",
+    "03_design_patterns/tests",
+    "04_testing",
+    "08_data_engineering/tests",
+    "09_ml_engineering/tests",
+    "10_expert/tests",
+]
+asyncio_mode = "auto"
+addopts = "-q --tb=short --import-mode=importlib"
+
+[tool.ruff]
+line-length = 99
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "ANN", "B", "C4", "SIM"]
+ignore = ["ANN101", "ANN102", "ANN401"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 99
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 99
+
+[tool.coverage.run]
+omit = ["*/tests/*", "*/projects/*"]

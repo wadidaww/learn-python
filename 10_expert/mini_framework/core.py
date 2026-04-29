@@ -13,12 +13,10 @@ import asyncio
 import json as _json
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from http import HTTPStatus
 from typing import Any
 
+from mini_framework.middleware import MiddlewareChain, logging_middleware, timing_middleware
 from mini_framework.router import Router
-from mini_framework.middleware import MiddlewareChain, timing_middleware, logging_middleware
-
 
 # ---------------------------------------------------------------------------
 # Request and Response

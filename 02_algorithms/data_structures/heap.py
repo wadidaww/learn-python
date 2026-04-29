@@ -212,7 +212,7 @@ def main() -> None:
         sorted_data.append(h.pop())
     print("Heap-sort:", sorted_data)
 
-    mh = MaxHeap.heapify(data)
+    MaxHeap.heapify(data)
     print("Top 5 (nlargest):", nlargest(5, data))
     print("Bot 5 (nsmallest):", nsmallest(5, data))
 

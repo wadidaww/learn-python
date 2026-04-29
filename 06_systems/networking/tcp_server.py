@@ -10,15 +10,20 @@ Run:
     python tcp_server.py
 
     # Client (terminal 2)
-    python -c "import socket; s=socket.create_connection(('127.0.0.1',9000)); s.sendall(b'Hello'); print(s.recv(1024))"
+    python -c "
+        import socket
+        s = socket.create_connection(('127.0.0.1', 9000))
+        s.sendall(b'Hello')
+        print(s.recv(1024))
+    "
 """
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import socket
 import threading
-from typing import Any
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -76,16 +81,12 @@ class TCPServer:
         """Stop the server and close all connections."""
         self._running = False
         if self._server_socket:
-            try:
+            with contextlib.suppress(OSError):
                 self._server_socket.close()
-            except OSError:
-                pass
         with self._lock:
             for client in list(self._clients):
-                try:
+                with contextlib.suppress(OSError):
                     client.close()
-                except OSError:
-                    pass
             self._clients.clear()
         logger.info("TCPServer stopped")
 
@@ -127,11 +128,8 @@ class TCPServer:
         except OSError:
             pass
         finally:
-            with self._lock:
-                try:
-                    self._clients.remove(conn)
-                except ValueError:
-                    pass
+            with self._lock, contextlib.suppress(ValueError):
+                self._clients.remove(conn)
             conn.close()
             logger.info("Client disconnected: %s:%d", *addr)
 

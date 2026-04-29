@@ -29,18 +29,11 @@ from pipeline.feature_engineering import (
     OneHotEncoder,
     StandardScaler,
     VarianceThresholdSelector,
-    to_feature_matrix,
-)
-from pipeline.model_trainer import (
-    KNNClassifier,
-    LogisticRegression,
-    cross_validate,
-    train_test_split,
 )
 from pipeline.model_evaluator import (
-    accuracy,
     accuracy as eval_accuracy,
-    classification_report,
+)
+from pipeline.model_evaluator import (
     confusion_matrix,
     mean_absolute_error,
     precision_recall_f1,
@@ -48,7 +41,12 @@ from pipeline.model_evaluator import (
     roc_auc,
     root_mean_squared_error,
 )
-
+from pipeline.model_trainer import (
+    KNNClassifier,
+    LogisticRegression,
+    cross_validate,
+    train_test_split,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -167,7 +165,7 @@ class TestLogisticRegression:
         model = LogisticRegression(learning_rate=0.5, max_iter=100)
         model.fit(X_tr, y_tr)
         preds = model.predict(X_te)
-        acc = sum(a == b for a, b in zip(y_te, preds)) / len(y_te)
+        acc = sum(a == b for a, b in zip(y_te, preds, strict=True)) / len(y_te)
         assert acc > 0.85, f"Expected accuracy > 0.85, got {acc:.3f}"
 
     def test_predict_proba_sums_to_1(self) -> None:

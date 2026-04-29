@@ -13,10 +13,11 @@ Endpoints:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 try:
     from fastapi import APIRouter, HTTPException, Query, status
+
     from app.models import UserCreate, UserResponse, UserUpdate
     FASTAPI_AVAILABLE = True
 except ImportError:  # pragma: no cover
@@ -73,7 +74,7 @@ if FASTAPI_AVAILABLE:
             "email":      payload.email,
             "full_name":  payload.full_name,
             "is_active":  True,
-            "created_at": datetime.now(timezone.utc),
+            "created_at": datetime.now(UTC),
             # Never store plaintext passwords in production; use bcrypt etc.
             "_password_hash": payload.password,
         }

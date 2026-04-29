@@ -10,7 +10,8 @@ Time complexity:
 
 from __future__ import annotations
 
-from typing import Generic, Iterator, TypeVar
+from collections.abc import Iterator
+from typing import Generic, TypeVar
 
 K = TypeVar("K")
 V = TypeVar("V")
@@ -184,7 +185,7 @@ def main() -> None:
     """Demonstrate HashTable usage."""
     ht: HashTable[str, int] = HashTable(capacity=4)
 
-    words = "the quick brown fox jumps over the lazy dog".split()
+    words = ["the", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"]
     for word in words:
         ht[word] = ht.get(word, 0) + 1  # type: ignore[assignment]
 

@@ -27,7 +27,7 @@ import operator
 import struct
 from typing import Union
 
-from benchmark import BenchResult, compare, measure
+from benchmark import compare
 
 # Type alias for the numeric containers we handle
 NumBuffer = Union[list[float], array.array, memoryview]  # noqa: UP007
@@ -52,7 +52,7 @@ def _make_array(n: int = N) -> array.array:  # type: ignore[type-arg]
 
 def add_lists(a: list[float], b: list[float]) -> list[float]:
     """Element-wise addition using a list-comprehension."""
-    return [x + y for x, y in zip(a, b)]
+    return [x + y for x, y in zip(a, b, strict=True)]
 
 
 # --- addition (array + map) ---
@@ -86,7 +86,7 @@ def add_inplace_memoryview(buf: array.array, delta: float) -> None:  # type: ign
 
 def dot_list(a: list[float], b: list[float]) -> float:
     """Naive dot product using a generator expression."""
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b, strict=True))
 
 
 def dot_map(a: array.array, b: array.array) -> float:  # type: ignore[type-arg]
@@ -226,11 +226,11 @@ def demo_sliding_sum() -> None:
     print("\n=== Sliding-window sum (window=100) ===")
     data_list = _make_list()
     data_arr = _make_array()
-    W = 100
+    window = 100
 
     compare(
-        lambda: sliding_sum_list(data_list, W),
-        lambda: sliding_sum_array(data_arr, W),
+        lambda: sliding_sum_list(data_list, window),
+        lambda: sliding_sum_array(data_arr, window),
         names=["sliding_sum_list", "sliding_sum_array (memoryview)"],
         iterations=8,
     )

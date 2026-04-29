@@ -13,7 +13,6 @@ import heapq
 from collections import Counter, defaultdict, deque, namedtuple
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Lists
 # ---------------------------------------------------------------------------

@@ -16,11 +16,12 @@ Run:
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import socket
 import threading
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from http import HTTPStatus
 from typing import Any
 
@@ -91,7 +92,7 @@ class HTTPResponse:
 
     def to_bytes(self) -> bytes:
         """Serialise to wire format."""
-        date = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
+        date = datetime.now(UTC).strftime("%a, %d %b %Y %H:%M:%S GMT")
         self.headers.setdefault("Date",           date)
         self.headers.setdefault("Server",         "PythonHTTP/0.1")
         self.headers.setdefault("Content-Length", str(len(self.body)))
@@ -188,10 +189,8 @@ class HTTPServer:
         """Stop the server."""
         self._running = False
         if self._sock:
-            try:
+            with contextlib.suppress(OSError):
                 self._sock.close()
-            except OSError:
-                pass
 
     def _accept_loop(self) -> None:
         assert self._sock is not None

@@ -7,10 +7,9 @@ URL router with path parameter extraction and method matching.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Awaitable
-from dataclasses import dataclass, field
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass
 from typing import Any
-
 
 Handler = Callable[..., Awaitable[Any]]
 
@@ -34,7 +33,7 @@ class Route:
         m = self.pattern.fullmatch(path)
         if m is None:
             return None
-        return dict(zip(self.param_names, m.groups()))
+        return dict(zip(self.param_names, m.groups(), strict=True))
 
 
 class Router:

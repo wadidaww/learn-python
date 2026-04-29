@@ -17,9 +17,8 @@ import io
 import pstats
 import sys
 import time
-from functools import lru_cache
+from functools import cache
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # Subject code: slow vs fast implementations
@@ -32,7 +31,7 @@ def fibonacci_naive(n: int) -> int:
     return fibonacci_naive(n - 1) + fibonacci_naive(n - 2)
 
 
-@lru_cache(maxsize=None)
+@cache
 def fibonacci_cached(n: int) -> int:
     """O(n) memoised Fibonacci with lru_cache."""
     if n <= 1:

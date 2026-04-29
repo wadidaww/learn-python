@@ -110,11 +110,9 @@ def run_pipeline(commands: list[list[str]], input_data: str | None = None) -> Ru
         raise ValueError("commands must not be empty")
 
     procs: list[subprocess.Popen[str]] = []
-    prev_stdout: Any = subprocess.PIPE
 
     # Provide initial stdin data for the first process
     if input_data is not None:
-        import io as _io
         first_stdin: Any = subprocess.PIPE
     else:
         first_stdin = None

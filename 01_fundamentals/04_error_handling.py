@@ -13,10 +13,12 @@ import contextlib
 import logging
 import time
 from collections.abc import Callable, Generator
-from typing import Any, TypeVar
+from typing import Any, Generic, TypeVar
 
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
+
+T = TypeVar("T")
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -177,7 +179,7 @@ def retry(
 # 4. Result type pattern (no exceptions for control flow)
 # ---------------------------------------------------------------------------
 
-class Result[T]:
+class Result(Generic[T]):
     """
     A simple Result monad that holds either a success value or an error.
 

@@ -23,9 +23,8 @@ import timeit
 import tracemalloc
 from collections.abc import Callable
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # Data structures
@@ -165,10 +164,14 @@ def compare(
     Returns:
         List of :class:`BenchResult` sorted fastest-first.
     """
-    labels = list(names) if names else [getattr(f, "__name__", f"fn_{i}") for i, f in enumerate(fns)]
+    labels = (
+        list(names)
+        if names
+        else [getattr(f, "__name__", f"fn_{i}") for i, f in enumerate(fns)]
+    )
     results: list[BenchResult] = [
         measure(fn, name=label, iterations=iterations, warmup=warmup)
-        for fn, label in zip(fns, labels)
+        for fn, label in zip(fns, labels, strict=True)
     ]
     results.sort(key=lambda r: r.mean_s)
 
@@ -177,8 +180,6 @@ def compare(
     print(f"\n{'Benchmark':<35} {'mean':>10} {'stdev':>10} {'peak':>10}  speedup")
     print("-" * 80)
     for r in results:
-        speedup = fastest / r.mean_s if r.mean_s > 0 else float("inf")
-        # speedup vs slowest = this row vs the fastest baseline (inverse)
         ratio = r.mean_s / fastest
         print(
             f"{r.name:<35} {r.mean_ms:9.3f}ms {r.stdev_s * 1_000:9.3f}ms "
@@ -195,13 +196,13 @@ def compare(
 
 def _demo() -> None:
     """Self-test: compare list sum vs generator sum."""
-    N = 100_000
+    n = 100_000
 
     def list_sum() -> int:
-        return sum([i * i for i in range(N)])
+        return sum([i * i for i in range(n)])
 
     def gen_sum() -> int:
-        return sum(i * i for i in range(N))
+        return sum(i * i for i in range(n))
 
     print("=== Benchmark harness self-test ===")
     compare(list_sum, gen_sum, iterations=5)

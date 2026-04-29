@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import json
 import sys
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -21,21 +20,19 @@ from pipeline.extractor import (
     JSONStringExtractor,
     MemoryExtractor,
 )
+from pipeline.loader import MemoryLoader, SQLiteLoader
+from pipeline.orchestrator import ETLPipeline
 from pipeline.transformer import (
     AddFieldTransformer,
     DeduplicateTransformer,
     DropNullTransformer,
     FilterTransformer,
-    NormalizeStringTransformer,
     RenameTransformer,
     SelectTransformer,
     TransformPipeline,
     TypeCoercionTransformer,
     ValidationTransformer,
 )
-from pipeline.loader import MemoryLoader, SQLiteLoader
-from pipeline.orchestrator import ETLPipeline
-
 
 CSV_DATA = """id,name,price,qty
 1,Widget A,9.99,10

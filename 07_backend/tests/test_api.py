@@ -11,8 +11,8 @@ import pytest
 
 fastapi = pytest.importorskip("fastapi", reason="fastapi not installed")
 
-from fastapi.testclient import TestClient
 from app.main import app
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 

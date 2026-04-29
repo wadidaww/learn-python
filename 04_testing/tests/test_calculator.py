@@ -15,7 +15,6 @@ import math
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from examples.calculator import (
     Calculator,
     CalculatorError,
@@ -23,7 +22,6 @@ from examples.calculator import (
     NegativeSqrtError,
     Operation,
 )
-
 
 # ---------------------------------------------------------------------------
 # Basic arithmetic

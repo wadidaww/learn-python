@@ -182,9 +182,9 @@ LRUCache = LRUCacheOrderedDict
 
 def main() -> None:
     """Demonstrate both LRU cache implementations."""
-    for CacheClass in [LRUCacheOrderedDict, LRUCacheLinkedList]:
-        print(f"\n=== {CacheClass.__name__} ===")
-        cache: LRUCacheOrderedDict[str, int] = CacheClass(capacity=3)  # type: ignore[assignment]
+    for cache_class in [LRUCacheOrderedDict, LRUCacheLinkedList]:
+        print(f"\n=== {cache_class.__name__} ===")
+        cache: LRUCacheOrderedDict[str, int] = cache_class(capacity=3)  # type: ignore[assignment]
         for k, v in [("a", 1), ("b", 2), ("c", 3)]:
             cache.put(k, v)
         print("After adding a,b,c:", cache)

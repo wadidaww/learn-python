@@ -15,12 +15,10 @@ Run:  python task_scheduler.py
 from __future__ import annotations
 
 import logging
-import queue
 import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")

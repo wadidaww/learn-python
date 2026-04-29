@@ -8,30 +8,29 @@ from __future__ import annotations
 
 import asyncio
 import sys
+from collections.abc import Coroutine
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mini_framework.router import Router
 from mini_framework.core import Application, Request, Response
 from mini_framework.middleware import (
+    Handler,
     MiddlewareChain,
-    timing_middleware,
-    cors_middleware,
-    logging_middleware,
 )
-from task_queue.queue import TaskQueue, TaskState, Priority
+from mini_framework.router import Router
+from task_queue.queue import Priority, TaskQueue
 from task_queue.worker import WorkerPool
-
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def run(coro):  # type: ignore[no-untyped-def]
-    return asyncio.get_event_loop().run_until_complete(coro)
+def run(coro: Coroutine[Any, Any, Any]) -> Any:
+    return asyncio.run(coro)
 
 
 # ---------------------------------------------------------------------------
@@ -177,13 +176,13 @@ class TestMiddlewareChain:
     def test_order(self) -> None:
         order: list[str] = []
 
-        async def mw1(request: Request, call_next):  # type: ignore[no-untyped-def]
+        async def mw1(request: Request, call_next: Handler) -> Response:
             order.append("mw1-before")
             resp = await call_next(request)
             order.append("mw1-after")
             return resp
 
-        async def mw2(request: Request, call_next):  # type: ignore[no-untyped-def]
+        async def mw2(request: Request, call_next: Handler) -> Response:
             order.append("mw2-before")
             resp = await call_next(request)
             order.append("mw2-after")
@@ -229,7 +228,7 @@ class TestTaskQueue:
             await q.enqueue(job, priority=Priority.NORMAL)
 
             first  = await q.dequeue()
-            second = await q.dequeue()
+            await q.dequeue()
             # Higher priority (more negative stored value) dequeues first
             assert first.max_retries >= 0   # structural check
             # All three tasks were enqueued

@@ -11,10 +11,7 @@ Exposes:
 
 from __future__ import annotations
 
-import json
-import pickle
 import time
-from pathlib import Path
 from typing import Any
 
 try:
@@ -111,11 +108,11 @@ if FASTAPI_AVAILABLE:
             registry = get_registry()
             try:
                 return registry.info(model_name)
-            except KeyError:
+            except KeyError as exc:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Model {model_name!r} not found",
-                )
+                ) from exc
 
         @app.get("/models")
         async def list_models() -> list[str]:
@@ -126,17 +123,17 @@ if FASTAPI_AVAILABLE:
             registry = get_registry()
             try:
                 model = registry.get(request.model_name)
-            except KeyError:
+            except KeyError as exc:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Model {request.model_name!r} not registered",
-                )
+                ) from exc
             start = time.perf_counter()
-            X = [request.features]
-            preds = model.predict(X)
+            x_input = [request.features]
+            preds = model.predict(x_input)
             prob: float | None = None
             try:
-                proba = model.predict_proba(X)
+                proba = model.predict_proba(x_input)
                 prob = proba[0][1]
             except NotImplementedError:
                 pass
@@ -153,11 +150,11 @@ if FASTAPI_AVAILABLE:
             registry = get_registry()
             try:
                 model = registry.get(request.model_name)
-            except KeyError:
+            except KeyError as exc:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Model {request.model_name!r} not registered",
-                )
+                ) from exc
             start = time.perf_counter()
             preds = model.predict(request.instances)
             latency = (time.perf_counter() - start) * 1000

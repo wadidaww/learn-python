@@ -14,8 +14,6 @@ from __future__ import annotations
 import heapq
 import math
 from collections import deque
-from typing import Any
-
 
 Graph = dict[str, list[tuple[str, int]]]    # weighted
 UGraph = dict[str, list[str]]               # unweighted
@@ -134,9 +132,9 @@ def dijkstra(graph: Graph, start: str) -> tuple[dict[str, float], dict[str, str 
     Time:  O((V + E) log V) with binary heap
     Space: O(V)
     """
-    distances: dict[str, float] = {node: math.inf for node in graph}
+    distances: dict[str, float] = dict.fromkeys(graph, math.inf)
     distances[start] = 0.0
-    predecessors: dict[str, str | None] = {node: None for node in graph}
+    predecessors: dict[str, str | None] = dict.fromkeys(graph)
 
     # (distance, node)
     heap: list[tuple[float, str]] = [(0.0, start)]
@@ -188,7 +186,7 @@ def topological_sort(graph: UGraph) -> list[str] | None:
     Uses Kahn's algorithm (BFS-based).
     Time:  O(V + E)
     """
-    in_degree: dict[str, int] = {node: 0 for node in graph}
+    in_degree: dict[str, int] = dict.fromkeys(graph, 0)
     for node in graph:
         for neighbor in graph[node]:
             in_degree[neighbor] = in_degree.get(neighbor, 0) + 1

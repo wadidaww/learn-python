@@ -19,7 +19,6 @@ import time
 from collections.abc import AsyncGenerator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Basic coroutines and tasks
 # ---------------------------------------------------------------------------
@@ -37,7 +36,7 @@ async def demo_tasks() -> None:
     print("=== Sequential fetch ===")
     start = time.perf_counter()
     for url in urls:
-        result = await fetch_data(url)
+        await fetch_data(url)
     elapsed = time.perf_counter() - start
     print(f"  Sequential: {elapsed:.3f}s")
 
@@ -156,12 +155,12 @@ async def demo_timeouts() -> None:
     try:
         result = await asyncio.wait_for(slow_operation(0.05), timeout=1.0)
         print(f"  Fast op completed: {result}")
-    except asyncio.TimeoutError:
+    except TimeoutError:
         print("  Fast op timed out (unexpected)")
 
     try:
         result = await asyncio.wait_for(slow_operation(2.0), timeout=0.1)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         print("  Slow op timed out as expected")
 
 

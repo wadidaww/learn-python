@@ -14,9 +14,7 @@ Metrics:
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
 from typing import Any
-
 
 Vector = list[float]
 
@@ -29,7 +27,7 @@ def accuracy(y_true: Vector, y_pred: Vector) -> float:
     """Fraction of correct predictions."""
     if not y_true:
         return 0.0
-    return sum(t == p for t, p in zip(y_true, y_pred)) / len(y_true)
+    return sum(t == p for t, p in zip(y_true, y_pred, strict=True)) / len(y_true)
 
 
 def confusion_matrix(
@@ -46,7 +44,7 @@ def confusion_matrix(
     if labels is None:
         labels = sorted(set(y_true) | set(y_pred))
     matrix: dict[tuple[Any, Any], int] = {(t, p): 0 for t in labels for p in labels}
-    for t, p in zip(y_true, y_pred):
+    for t, p in zip(y_true, y_pred, strict=True):
         key = (t, p)
         if key in matrix:
             matrix[key] += 1
@@ -64,9 +62,12 @@ def precision_recall_f1(
     Returns:
         (precision, recall, f1)
     """
-    tp = sum(1 for t, p in zip(y_true, y_pred) if t == positive_class and p == positive_class)
-    fp = sum(1 for t, p in zip(y_true, y_pred) if t != positive_class and p == positive_class)
-    fn = sum(1 for t, p in zip(y_true, y_pred) if t == positive_class and p != positive_class)
+    pairs = zip(y_true, y_pred, strict=True)
+    tp = sum(1 for t, p in pairs if t == positive_class and p == positive_class)
+    pairs = zip(y_true, y_pred, strict=True)
+    fp = sum(1 for t, p in pairs if t != positive_class and p == positive_class)
+    pairs = zip(y_true, y_pred, strict=True)
+    fn = sum(1 for t, p in pairs if t == positive_class and p != positive_class)
 
     prec = tp / (tp + fp) if tp + fp > 0 else 0.0
     rec  = tp / (tp + fn) if tp + fn > 0 else 0.0
@@ -97,9 +98,9 @@ def classification_report(
         }
 
     # Macro average
-    macro_p = sum(report[str(l)]["precision"] for l in labels) / len(labels)
-    macro_r = sum(report[str(l)]["recall"]    for l in labels) / len(labels)
-    macro_f = sum(report[str(l)]["f1"]        for l in labels) / len(labels)
+    macro_p = sum(report[str(lbl)]["precision"] for lbl in labels) / len(labels)
+    macro_r = sum(report[str(lbl)]["recall"]    for lbl in labels) / len(labels)
+    macro_f = sum(report[str(lbl)]["f1"]        for lbl in labels) / len(labels)
     report["macro avg"] = {
         "precision": round(macro_p, 4),
         "recall":    round(macro_r, 4),
@@ -108,9 +109,9 @@ def classification_report(
     }
 
     # Weighted average
-    w_p = sum(report[str(l)]["precision"] * support[l] for l in labels) / total
-    w_r = sum(report[str(l)]["recall"]    * support[l] for l in labels) / total
-    w_f = sum(report[str(l)]["f1"]        * support[l] for l in labels) / total
+    w_p = sum(report[str(lbl)]["precision"] * support[lbl] for lbl in labels) / total
+    w_r = sum(report[str(lbl)]["recall"]    * support[lbl] for lbl in labels) / total
+    w_f = sum(report[str(lbl)]["f1"]        * support[lbl] for lbl in labels) / total
     report["weighted avg"] = {
         "precision": round(w_p, 4),
         "recall":    round(w_r, 4),
@@ -137,7 +138,7 @@ def roc_auc(y_true: Vector, y_score: Vector) -> float:
         AUC score in [0, 1].
     """
     # Sort by score descending
-    pairs = sorted(zip(y_score, y_true), reverse=True)
+    pairs = sorted(zip(y_score, y_true, strict=True), reverse=True)
     n_pos = sum(y_true)
     n_neg = len(y_true) - n_pos
 
@@ -168,12 +169,12 @@ def roc_auc(y_true: Vector, y_score: Vector) -> float:
 
 def mean_absolute_error(y_true: Vector, y_pred: Vector) -> float:
     """Mean Absolute Error."""
-    return sum(abs(t - p) for t, p in zip(y_true, y_pred)) / len(y_true)
+    return sum(abs(t - p) for t, p in zip(y_true, y_pred, strict=True)) / len(y_true)
 
 
 def mean_squared_error(y_true: Vector, y_pred: Vector) -> float:
     """Mean Squared Error."""
-    return sum((t - p) ** 2 for t, p in zip(y_true, y_pred)) / len(y_true)
+    return sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=True)) / len(y_true)
 
 
 def root_mean_squared_error(y_true: Vector, y_pred: Vector) -> float:
@@ -189,7 +190,7 @@ def r2_score(y_true: Vector, y_pred: Vector) -> float:
     """
     mean_y = sum(y_true) / len(y_true)
     ss_tot = sum((t - mean_y) ** 2 for t in y_true)
-    ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred))
+    ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=True))
     return 1 - ss_res / ss_tot if ss_tot != 0 else float("nan")
 
 

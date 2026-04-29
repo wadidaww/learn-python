@@ -15,37 +15,34 @@ import pytest
 # Ensure 03_design_patterns is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from creational.singleton import ApplicationConfig, DatabasePool, SingletonMeta
-from creational.factory import (
-    EmailNotification,
-    Message,
-    SMSNotification,
-    create_notification,
-    render_login_form,
-    WebUIFactory,
-    MobileUIFactory,
-)
 from behavioral.observer import AlertObserver, EventBus, StockSubject
 from behavioral.strategy import (
     CreditCardPayment,
     DataSorter,
-    PercentageDiscount,
     FlatDiscount,
-    NoDiscount,
+    PercentageDiscount,
     QuickSortStrategy,
     ShoppingCart,
 )
+from creational.factory import (
+    EmailNotification,
+    Message,
+    MobileUIFactory,
+    SMSNotification,
+    WebUIFactory,
+    create_notification,
+    render_login_form,
+)
+from creational.singleton import ApplicationConfig
+from di_container import Container, DIError, InMemoryDatabase, Logger, UserService
 from structural.decorator import (
     CachingDecorator,
     ConcreteComponent,
     LoggingDecorator,
     PricingDecorator,
     memoize,
-    timer,
     validate_positive,
 )
-from di_container import Container, DIError, InMemoryDatabase, Logger, UserService
-
 
 # ---------------------------------------------------------------------------
 # Singleton

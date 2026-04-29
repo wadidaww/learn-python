@@ -15,7 +15,6 @@ import time
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-
 # Type aliases defined here to avoid circular import with core.py
 # We use forward references for Request/Response
 Handler = Callable[..., Awaitable[Any]]
@@ -46,7 +45,9 @@ class MiddlewareChain:
         for mw in reversed(self._middleware):
             _current_handler = handler  # closure capture
 
-            async def make_next(request: Any, mw: Middleware = mw, h: Handler = _current_handler) -> Any:
+            async def make_next(
+                request: Any, mw: Middleware = mw, h: Handler = _current_handler
+            ) -> Any:
                 async def call_next(req: Any) -> Any:
                     return await h(req)
                 return await mw(request, call_next)

@@ -19,7 +19,6 @@ Run::
 from __future__ import annotations
 
 import functools
-import math
 import time
 from collections import defaultdict
 from collections.abc import Callable
@@ -105,7 +104,10 @@ class MemoDict:
         return self.hits / total if total else 0.0
 
 
-def expensive_prime_factors(n: int, _cache: MemoDict = MemoDict()) -> list[int]:
+_prime_factors_cache: MemoDict = MemoDict()
+
+
+def expensive_prime_factors(n: int, _cache: MemoDict = _prime_factors_cache) -> list[int]:
     """
     Return the prime factors of *n*, using a shared MemoDict.
 

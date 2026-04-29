@@ -17,8 +17,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from pipeline.extractor import Extractor
-from pipeline.transformer import Transformer
 from pipeline.loader import Loader
+from pipeline.transformer import Transformer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -217,16 +217,14 @@ class ETLPipeline:
 
 def main() -> None:
     """Run a sample ETL pipeline."""
-    import tempfile
-    from pathlib import Path
-    from pipeline.extractor import CSVStringExtractor, MemoryExtractor
+    from pipeline.extractor import CSVStringExtractor
+    from pipeline.loader import MemoryLoader
     from pipeline.transformer import (
-        TypeCoercionTransformer,
-        FilterTransformer,
         AddFieldTransformer,
         DropNullTransformer,
+        FilterTransformer,
+        TypeCoercionTransformer,
     )
-    from pipeline.loader import MemoryLoader, SQLiteLoader
 
     csv_data = """date,product,quantity,price
 2024-01-01,Widget A,10,9.99

@@ -7,13 +7,6 @@ pytest tests for all data structure implementations in 02_algorithms.
 from __future__ import annotations
 
 import pytest
-
-from data_structures.hash_table import HashTable
-from data_structures.heap import MaxHeap, MinHeap, nlargest, nsmallest
-from data_structures.lru_cache import LRUCacheLinkedList, LRUCacheOrderedDict
-from data_structures.trie import Trie
-from algorithms.sorting import heapsort, mergesort, quicksort
-from algorithms.graph import bfs, bfs_shortest_path, dijkstra, topological_sort
 from algorithms.dynamic_programming import (
     coin_change,
     fibonacci_tabulation,
@@ -21,7 +14,12 @@ from algorithms.dynamic_programming import (
     lcs,
     lis_length,
 )
-
+from algorithms.graph import bfs, bfs_shortest_path, dijkstra, topological_sort
+from algorithms.sorting import heapsort, mergesort, quicksort
+from data_structures.hash_table import HashTable
+from data_structures.heap import MaxHeap, MinHeap, nlargest, nsmallest
+from data_structures.lru_cache import LRUCacheLinkedList, LRUCacheOrderedDict
+from data_structures.trie import Trie
 
 # ---------------------------------------------------------------------------
 # HashTable
@@ -161,25 +159,25 @@ class TestTrie:
 # LRU Cache
 # ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("CacheClass", [LRUCacheOrderedDict, LRUCacheLinkedList])
+@pytest.mark.parametrize("cache_class", [LRUCacheOrderedDict, LRUCacheLinkedList])
 class TestLRUCache:
-    def test_basic_get_put(self, CacheClass: type) -> None:
-        cache = CacheClass(capacity=2)
+    def test_basic_get_put(self, cache_class: type) -> None:
+        cache = cache_class(capacity=2)
         cache.put("a", 1)
         cache.put("b", 2)
         assert cache.get("a") == 1
         assert cache.get("b") == 2
 
-    def test_eviction(self, CacheClass: type) -> None:
-        cache = CacheClass(capacity=2)
+    def test_eviction(self, cache_class: type) -> None:
+        cache = cache_class(capacity=2)
         cache.put("a", 1)
         cache.put("b", 2)
         cache.put("c", 3)   # evicts "a"
         assert cache.get("a") is None
         assert cache.get("b") == 2
 
-    def test_touch_prevents_eviction(self, CacheClass: type) -> None:
-        cache = CacheClass(capacity=2)
+    def test_touch_prevents_eviction(self, cache_class: type) -> None:
+        cache = cache_class(capacity=2)
         cache.put("a", 1)
         cache.put("b", 2)
         cache.get("a")       # touch a → a is now MRU
@@ -187,8 +185,8 @@ class TestLRUCache:
         assert cache.get("a") == 1
         assert cache.get("b") is None
 
-    def test_update_existing(self, CacheClass: type) -> None:
-        cache = CacheClass(capacity=2)
+    def test_update_existing(self, cache_class: type) -> None:
+        cache = cache_class(capacity=2)
         cache.put("a", 1)
         cache.put("a", 99)
         assert cache.get("a") == 99
@@ -280,7 +278,7 @@ class TestDynamicProgramming:
         assert max_val == 10
 
     def test_lcs(self) -> None:
-        assert lcs("ABCBDAB", "BDCAB") in {"BDAB", "BCAB", "BCBA", "BDAB"}
+        assert lcs("ABCBDAB", "BDCAB") in {"BDAB", "BCAB", "BCBA"}
         assert len(lcs("ABCBDAB", "BDCAB")) == 4
 
     def test_coin_change(self) -> None:

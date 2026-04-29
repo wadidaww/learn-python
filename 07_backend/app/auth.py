@@ -15,11 +15,12 @@ import base64
 import hashlib
 import hmac
 import json
-import time
-from typing import Any
 
 # ── Secret key (load from env in production) ──────────────────────────────
 import os
+import time
+from typing import Any
+
 _SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-in-production-use-env-var")
 _ALGORITHM  = "HS256"
 _DEFAULT_TTL = 3600  # 1 hour

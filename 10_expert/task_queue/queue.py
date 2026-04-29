@@ -15,11 +15,10 @@ from __future__ import annotations
 import asyncio
 import time
 import uuid
-from collections.abc import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # Priority and State
@@ -151,7 +150,7 @@ class TaskQueue:
             if task.state == TaskState.FAILED:
                 raise RuntimeError(f"Task failed: {task.error}")
             await asyncio.sleep(poll_interval)
-        raise asyncio.TimeoutError(f"Task {task_id} did not complete in {timeout}s")
+        raise TimeoutError(f"Task {task_id} did not complete in {timeout}s")
 
     @property
     def qsize(self) -> int:
@@ -159,10 +158,11 @@ class TaskQueue:
 
     @property
     def stats(self) -> dict[str, int]:
-        counts = {s: 0 for s in (
-            TaskState.PENDING, TaskState.RUNNING, TaskState.DONE,
-            TaskState.FAILED, TaskState.RETRYING
-        )}
+        states = (
+            TaskState.PENDING, TaskState.RUNNING,
+            TaskState.DONE, TaskState.FAILED, TaskState.RETRYING,
+        )
+        counts = dict.fromkeys(states, 0)
         for t in self._tasks.values():
             counts[t.state] = counts.get(t.state, 0) + 1
         return counts

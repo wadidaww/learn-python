@@ -7,13 +7,12 @@ Pydantic v2 models for request/response bodies.
 from __future__ import annotations
 
 try:
-    from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+    from pydantic import BaseModel, ConfigDict, Field, field_validator
     PYDANTIC_AVAILABLE = True
 except ImportError:  # pragma: no cover
     PYDANTIC_AVAILABLE = False
 
-from datetime import datetime, timezone
-
+from datetime import datetime
 
 if PYDANTIC_AVAILABLE:
     class UserCreate(BaseModel):

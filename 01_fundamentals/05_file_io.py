@@ -10,13 +10,10 @@ Run directly:  python 05_file_io.py
 from __future__ import annotations
 
 import csv
-import io
 import json
-import os
 import tempfile
 from pathlib import Path
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # 1. Text files with pathlib

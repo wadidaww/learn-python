@@ -9,12 +9,12 @@ Each worker runs in an asyncio task and pulls jobs from the shared queue.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import time
 from dataclasses import dataclass
 from typing import Any
 
 from task_queue.queue import TaskQueue, TaskState
-
 
 # ---------------------------------------------------------------------------
 # Worker
@@ -52,7 +52,7 @@ class Worker:
         while self._running:
             try:
                 job = await asyncio.wait_for(self._queue.dequeue(), timeout=0.2)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 continue
 
             job.state   = TaskState.RUNNING
@@ -88,10 +88,8 @@ class Worker:
         self._running = False
         if self._task:
             self._task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError, Exception):
                 await self._task
-            except (asyncio.CancelledError, Exception):
-                pass
 
 
 # ---------------------------------------------------------------------------
@@ -182,7 +180,8 @@ async def demo() -> None:
         task_ids.append(tid)
 
     # Also submit some flaky tasks
-    flaky_ids = [await pool.submit(flaky_task, i) for i in range(5)]
+    for i in range(5):
+        await pool.submit(flaky_task, i)
 
     # Collect results
     results: list[Any] = []

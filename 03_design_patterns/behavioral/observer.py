@@ -8,6 +8,7 @@ Provides both a classic Observer (typed) and a lightweight EventBus.
 
 from __future__ import annotations
 
+import contextlib
 import weakref
 from abc import ABC, abstractmethod
 from collections import defaultdict
@@ -141,10 +142,8 @@ class EventBus:
 
     def unsubscribe(self, event: str, handler: Handler) -> None:
         """Remove *handler* from *event*."""
-        try:
+        with contextlib.suppress(ValueError):
             self._handlers[event].remove(handler)
-        except ValueError:
-            pass
 
     def emit(self, event: str, **kwargs: Any) -> None:
         """Dispatch *event* to all registered handlers."""

@@ -15,9 +15,6 @@ from __future__ import annotations
 import math
 import multiprocessing as mp
 import time
-from collections.abc import Iterator
-from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # CPU-bound work
@@ -31,10 +28,7 @@ def is_prime(n: int) -> bool:
         return True
     if n % 2 == 0:
         return False
-    for i in range(3, int(math.sqrt(n)) + 1, 2):
-        if n % i == 0:
-            return False
-    return True
+    return all(n % i != 0 for i in range(3, int(math.sqrt(n)) + 1, 2))
 
 
 def count_primes_in_range(start: int, end: int) -> int:
@@ -88,7 +82,7 @@ def demo_imap(numbers: list[int]) -> None:
     """Use imap_unordered to check primality of a batch of numbers."""
     print("\n=== Pool.imap_unordered ===")
     with mp.Pool() as pool:
-        primes = [n for n, p in zip(numbers, pool.imap(is_prime, numbers)) if p]
+        primes = [n for n, p in zip(numbers, pool.imap(is_prime, numbers), strict=True) if p]
     print(f"  Primes in {numbers[:5]}…: {primes[:10]}")
 
 
@@ -96,14 +90,14 @@ def demo_imap(numbers: list[int]) -> None:
 # Demo: multiprocessing.Queue
 # ---------------------------------------------------------------------------
 
-def queue_producer(q: "mp.Queue[int]", count: int) -> None:
+def queue_producer(q: mp.Queue[int], count: int) -> None:
     """Put *count* items into *q*."""
     for i in range(count):
         q.put(i)
     q.put(-1)  # sentinel
 
 
-def queue_consumer(q: "mp.Queue[int]", result_list: "mp.Queue[list[int]]") -> None:
+def queue_consumer(q: mp.Queue[int], result_list: mp.Queue[list[int]]) -> None:
     """Drain *q* until sentinel and put collected items into *result_list*."""
     collected: list[int] = []
     while True:
@@ -136,7 +130,7 @@ def demo_queue() -> None:
 # Demo: shared memory Value
 # ---------------------------------------------------------------------------
 
-def increment_counter(counter: "mp.Value[int]", lock: mp.Lock, n: int) -> None:  # type: ignore[type-arg]
+def increment_counter(counter: mp.Value[int], lock: mp.Lock, n: int) -> None:  # type: ignore[type-arg]
     """Increment a shared counter *n* times (process-safe)."""
     for _ in range(n):
         with lock:

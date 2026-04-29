@@ -7,12 +7,9 @@ All implemented in pure Python (no numpy/sklearn dependency).
 
 from __future__ import annotations
 
-import math
 import statistics
 from abc import ABC, abstractmethod
-from collections import Counter
 from typing import Any
-
 
 Vector = list[float]
 Matrix = list[Vector]
@@ -164,13 +161,13 @@ class LabelEncoder:
         self._inverse: dict[int, str] = {}
 
     def fit(self, labels: list[Any]) -> LabelEncoder:
-        unique = sorted({str(l) for l in labels})
+        unique = sorted({str(lbl) for lbl in labels})
         self._mapping = {v: i for i, v in enumerate(unique)}
         self._inverse = {i: v for v, i in self._mapping.items()}
         return self
 
     def transform(self, labels: list[Any]) -> list[int]:
-        return [self._mapping[str(l)] for l in labels]
+        return [self._mapping[str(lbl)] for lbl in labels]
 
     def inverse_transform(self, indices: list[int]) -> list[str]:
         return [self._inverse[i] for i in indices]

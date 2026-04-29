@@ -13,9 +13,6 @@ Problems covered:
 
 from __future__ import annotations
 
-from functools import lru_cache
-
-
 # ---------------------------------------------------------------------------
 # Fibonacci
 # ---------------------------------------------------------------------------
@@ -165,15 +162,15 @@ def coin_change(coins: list[int], amount: int) -> int:
     Time:  O(amount * len(coins))
     Space: O(amount)
     """
-    INF = float("inf")
-    dp: list[float] = [INF] * (amount + 1)
+    inf = float("inf")
+    dp: list[float] = [inf] * (amount + 1)
     dp[0] = 0
 
     for coin in coins:
         for a in range(coin, amount + 1):
             dp[a] = min(dp[a], dp[a - coin] + 1)
 
-    return int(dp[amount]) if dp[amount] != INF else -1
+    return int(dp[amount]) if dp[amount] != inf else -1
 
 
 def coin_change_ways(coins: list[int], amount: int) -> int:

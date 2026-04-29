@@ -29,7 +29,6 @@ import time
 from multiprocessing.shared_memory import SharedMemory
 from typing import NamedTuple
 
-
 # ---------------------------------------------------------------------------
 # Matrix helpers
 # ---------------------------------------------------------------------------
@@ -318,7 +317,7 @@ def matrices_close(
     tol: float = 1e-9,
 ) -> bool:
     """Return True if every element of *a* and *b* differs by less than *tol*."""
-    return all(abs(x - y) < tol for x, y in zip(a, b))
+    return all(abs(x - y) < tol for x, y in zip(a, b, strict=True))
 
 
 # ---------------------------------------------------------------------------

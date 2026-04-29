@@ -48,7 +48,7 @@ class Model(ABC):
 
 def dot(a: Vector, b: Vector) -> float:
     """Dot product of two vectors."""
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b, strict=True))
 
 
 def sigmoid(z: float) -> float:
@@ -147,7 +147,7 @@ class LogisticRegression(Model):
     def _log_loss(self, X: Matrix, y: Vector) -> float:
         total = 0.0
         eps = 1e-12
-        for xi, yi in zip(X, y):
+        for xi, yi in zip(X, y, strict=True):
             p = sigmoid(dot(self.weights, xi) + self.bias)
             total += -(yi * math.log(p + eps) + (1 - yi) * math.log(1 - p + eps))
         return total / len(X)
@@ -182,7 +182,7 @@ class LogisticRegression(Model):
                 m = len(batch)
                 self.weights = [
                     w - self.learning_rate * g / m
-                    for w, g in zip(self.weights, grad_w)
+                    for w, g in zip(self.weights, grad_w, strict=True)
                 ]
                 self.bias -= self.learning_rate * grad_b / m
 
@@ -229,7 +229,7 @@ class KNNClassifier(Model):
 
     @staticmethod
     def _distance(a: Vector, b: Vector) -> float:
-        return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+        return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b, strict=True)))
 
     def fit(self, X: Matrix, y: Vector) -> KNNClassifier:
         self._X_train = X
@@ -241,7 +241,7 @@ class KNNClassifier(Model):
         for xi in X:
             distances = [
                 (self._distance(xi, xj), yj)
-                for xj, yj in zip(self._X_train, self._y_train)
+                for xj, yj in zip(self._X_train, self._y_train, strict=True)
             ]
             distances.sort(key=lambda t: t[0])
             k_labels = [label for _, label in distances[: self.k]]
@@ -296,7 +296,7 @@ def cross_validate(
     """
     if scorer is None:
         def scorer(y_true: Vector, y_pred: Vector) -> float:
-            return sum(a == b for a, b in zip(y_true, y_pred)) / len(y_true)
+            return sum(a == b for a, b in zip(y_true, y_pred, strict=True)) / len(y_true)
 
     folds = k_fold_split(X, y, k=k, random_state=random_state)
     scores: list[float] = []
@@ -315,7 +315,6 @@ def cross_validate(
 
 def main() -> None:
     """Train a logistic regression on a synthetic dataset."""
-    import math
 
     rng = random.Random(0)
 
@@ -339,7 +338,7 @@ def main() -> None:
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
-    accuracy = sum(a == b for a, b in zip(y_test, y_pred)) / len(y_test)
+    accuracy = sum(a == b for a, b in zip(y_test, y_pred, strict=True)) / len(y_test)
     print(f"\nTest accuracy: {accuracy:.4f}")
 
     cv = cross_validate(LogisticRegression(learning_rate=0.1, max_iter=200), X, y, k=5)

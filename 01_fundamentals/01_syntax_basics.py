@@ -13,7 +13,6 @@ import math
 from collections.abc import Generator, Iterator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Variables and built-in types
 # ---------------------------------------------------------------------------

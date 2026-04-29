@@ -9,11 +9,9 @@ Each transformer takes a list of records and returns a list of records.
 
 from __future__ import annotations
 
-import re
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
-
 
 Record = dict[str, Any]
 

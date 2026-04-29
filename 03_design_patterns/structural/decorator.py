@@ -63,7 +63,7 @@ def retry(
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             last: BaseException | None = None
-            for attempt in range(1, max_attempts + 1):
+            for _attempt in range(1, max_attempts + 1):
                 try:
                     return func(*args, **kwargs)
                 except exceptions as exc:

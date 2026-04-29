@@ -17,7 +17,7 @@ import argparse
 import json
 import sys
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 DEFAULT_DB = Path.home() / ".todo_app" / "todos.json"
@@ -35,14 +35,14 @@ class TodoItem:
     title: str
     done: bool = False
     created_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
     completed_at: str | None = None
 
     def complete(self) -> None:
         """Mark this item as done."""
         self.done = True
-        self.completed_at = datetime.now(timezone.utc).isoformat()
+        self.completed_at = datetime.now(UTC).isoformat()
 
 
 # ---------------------------------------------------------------------------

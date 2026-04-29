@@ -62,12 +62,14 @@ def precision_recall_f1(
     Returns:
         (precision, recall, f1)
     """
-    pairs = zip(y_true, y_pred, strict=True)
-    tp = sum(1 for t, p in pairs if t == positive_class and p == positive_class)
-    pairs = zip(y_true, y_pred, strict=True)
-    fp = sum(1 for t, p in pairs if t != positive_class and p == positive_class)
-    pairs = zip(y_true, y_pred, strict=True)
-    fn = sum(1 for t, p in pairs if t == positive_class and p != positive_class)
+    tp = fp = fn = 0
+    for t, p in zip(y_true, y_pred, strict=True):
+        if t == positive_class and p == positive_class:
+            tp += 1
+        elif t != positive_class and p == positive_class:
+            fp += 1
+        elif t == positive_class and p != positive_class:
+            fn += 1
 
     prec = tp / (tp + fp) if tp + fp > 0 else 0.0
     rec  = tp / (tp + fn) if tp + fn > 0 else 0.0

@@ -362,7 +362,7 @@ def main() -> None:
     print(f"  Speedup (Shm  vs seq):    {t_seq / t_shm:.2f}x")
     print(
         "\n  Note: for small matrices spawn/IPC overhead dominates."
-        "\n  Increase N, M, K to see super-linear speedup on multi-core hardware."
+        "\n  Increase N, M, K to see near-linear speedup on multi-core hardware."
     )
 
 

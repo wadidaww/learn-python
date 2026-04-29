@@ -168,7 +168,7 @@ def measure_array_vs_list(n: int = 1_000_000) -> None:
     arr_bytes = sys.getsizeof(int_arr)
     print(f"  list size:         {list_bytes / 1024 / 1024:.2f} MB (header only; objects extra)")
     print(f"  array.array size:  {arr_bytes / 1024 / 1024:.2f} MB (all data inlined)")
-    print(f"  Per-element array: {int_arr.itemsize} bytes vs ~28 bytes (CPython int object)")
+    print(f"  Per-element array: {int_arr.itemsize} bytes vs ~28 bytes (CPython int object, version-dependent)")
 
 
 # ---------------------------------------------------------------------------

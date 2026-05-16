@@ -24,7 +24,7 @@ Work through modules **in order**. Each module builds on the previous.
 | # | Module | Topics |
 |---|--------|--------|
 | 01 | **Fundamentals** | Syntax, data structures, OOP, error handling, file I/O |
-| 02 | **Algorithms & Data Structures** | Hash tables, heaps, tries, LRU cache, sorting, graphs, DP |
+| 02 | **Algorithms & Data Structures** | Hash tables, heaps, tries, LRU cache, sorting, graphs, DP, competitive programming patterns |
 | 03 | **Design Patterns** | Singleton, Factory, Observer, Strategy, Decorator, DI |
 | 04 | **Testing & Code Quality** | pytest, fixtures, mocks, parametrize, property-based testing |
 | 05 | **Performance & Optimization** | Profiling, asyncio, multiprocessing, concurrent.futures |

@@ -11,6 +11,8 @@ Implementations from scratch — understand the internals before using built-ins
 | `data_structures/heap.py` | Min-heap and max-heap |
 | `data_structures/trie.py` | Prefix trie |
 | `data_structures/lru_cache.py` | LRU cache (OrderedDict + raw doubly-linked list) |
+| `competitive_programming/tips_and_tricks.py` | Prefix sums, sliding window, two pointers, frequency tricks |
+| `competitive_programming/syntax_patterns.py` | Contest-friendly Python idioms for graphs, sorting, deduplication |
 
 ### Algorithms
 | File | What it implements |

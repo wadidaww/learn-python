@@ -13,13 +13,12 @@ import math
 import random
 
 import pytest
-
 from examples.calculator import Calculator, DivisionByZeroError
-
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def random_floats(
     n: int = 50,
@@ -40,6 +39,7 @@ def random_nonzero_floats(n: int = 50, seed: int = 42) -> list[float]:
 # ---------------------------------------------------------------------------
 # Arithmetic properties
 # ---------------------------------------------------------------------------
+
 
 class TestCommutativity:
     """a + b == b + a  and  a * b == b * a."""
@@ -126,7 +126,7 @@ class TestSqrtProperties:
         calc = Calculator()
         for x in random_floats(30, low=0, high=10_000, seed=12):
             s = calc.sqrt(x)
-            assert s ** 2 == pytest.approx(x, rel=1e-9)
+            assert s**2 == pytest.approx(x, rel=1e-9)
 
     def test_sqrt_of_square(self) -> None:
         calc = Calculator()

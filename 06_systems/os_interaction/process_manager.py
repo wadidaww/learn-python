@@ -29,15 +29,16 @@ logger = logging.getLogger(__name__)
 # Data types
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class RunResult:
     """Result of running a subprocess command."""
 
-    command:     list[str]
-    returncode:  int
-    stdout:      str
-    stderr:      str
-    elapsed:     float
+    command: list[str]
+    returncode: int
+    stdout: str
+    stderr: str
+    elapsed: float
 
     @property
     def success(self) -> bool:
@@ -51,6 +52,7 @@ class RunResult:
 # ---------------------------------------------------------------------------
 # Core runner
 # ---------------------------------------------------------------------------
+
 
 def run(
     command: list[str],
@@ -115,6 +117,7 @@ def run_pipeline(commands: list[list[str]], input_data: str | None = None) -> Ru
     # Provide initial stdin data for the first process
     if input_data is not None:
         import io as _io
+
         first_stdin: Any = subprocess.PIPE
     else:
         first_stdin = None
@@ -161,6 +164,7 @@ def run_pipeline(commands: list[list[str]], input_data: str | None = None) -> Ru
 # ---------------------------------------------------------------------------
 # Higher-level utilities
 # ---------------------------------------------------------------------------
+
 
 def python_run(script: str, *args: str, timeout: float = 10.0) -> RunResult:
     """Execute a Python snippet using the current interpreter."""
@@ -217,6 +221,7 @@ class BackgroundProcess:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate process management utilities."""

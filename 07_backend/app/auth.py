@@ -15,19 +15,21 @@ import base64
 import hashlib
 import hmac
 import json
-import time
-from typing import Any
 
 # ── Secret key (load from env in production) ──────────────────────────────
 import os
+import time
+from typing import Any
+
 _SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-in-production-use-env-var")
-_ALGORITHM  = "HS256"
+_ALGORITHM = "HS256"
 _DEFAULT_TTL = 3600  # 1 hour
 
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
 
 def _b64url_encode(data: bytes) -> str:
     """Base64-URL encode bytes (no padding)."""
@@ -50,6 +52,7 @@ def _sign(message: str, secret: str) -> str:
 # Public API
 # ---------------------------------------------------------------------------
 
+
 def create_token(
     payload: dict[str, Any],
     secret: str = _SECRET_KEY,
@@ -67,13 +70,13 @@ def create_token(
         Dot-separated base64url token string.
     """
     now = int(time.time())
-    header  = {"alg": _ALGORITHM, "typ": "JWT"}
-    claims  = {**payload, "iat": now, "exp": now + ttl}
+    header = {"alg": _ALGORITHM, "typ": "JWT"}
+    claims = {**payload, "iat": now, "exp": now + ttl}
 
-    header_encoded  = _b64url_encode(json.dumps(header,  separators=(",", ":")).encode())
+    header_encoded = _b64url_encode(json.dumps(header, separators=(",", ":")).encode())
     payload_encoded = _b64url_encode(json.dumps(claims, separators=(",", ":")).encode())
-    signing_input   = f"{header_encoded}.{payload_encoded}"
-    signature       = _sign(signing_input, secret)
+    signing_input = f"{header_encoded}.{payload_encoded}"
+    signature = _sign(signing_input, secret)
 
     return f"{signing_input}.{signature}"
 
@@ -126,6 +129,7 @@ def hash_password(password: str, salt: str | None = None) -> str:
         A string of the form "salt$hash" (both base64url encoded).
     """
     import secrets
+
     _salt = salt.encode() if salt else secrets.token_bytes(16)
     dk = hashlib.pbkdf2_hmac("sha256", password.encode(), _salt, iterations=260_000)
     return f"{_b64url_encode(_salt)}${_b64url_encode(dk)}"
@@ -154,6 +158,7 @@ def verify_password(password: str, stored: str) -> bool:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate token creation and verification."""

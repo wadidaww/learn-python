@@ -11,8 +11,8 @@ import pytest
 
 fastapi = pytest.importorskip("fastapi", reason="fastapi not installed")
 
-from fastapi.testclient import TestClient
 from app.main import app
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
@@ -29,16 +29,20 @@ class TestUsers:
     def setup_method(self) -> None:
         """Clear the in-memory DB between tests."""
         from app.routers import users as u_mod
+
         u_mod._db.clear()
         u_mod._next_id = 1
 
     def _create_user(self, username: str = "alice") -> dict:
-        resp = client.post("/api/v1/users", json={
-            "username":  username,
-            "email":     f"{username}@example.com",
-            "full_name": username.title(),
-            "password":  "SecurePass1",
-        })
+        resp = client.post(
+            "/api/v1/users",
+            json={
+                "username": username,
+                "email": f"{username}@example.com",
+                "full_name": username.title(),
+                "password": "SecurePass1",
+            },
+        )
         assert resp.status_code == 201
         return resp.json()
 
@@ -88,10 +92,13 @@ class TestUsers:
 
     def test_duplicate_username(self) -> None:
         self._create_user("alice")
-        resp = client.post("/api/v1/users", json={
-            "username":  "alice",
-            "email":     "other@example.com",
-            "full_name": "Alice 2",
-            "password":  "SecurePass1",
-        })
+        resp = client.post(
+            "/api/v1/users",
+            json={
+                "username": "alice",
+                "email": "other@example.com",
+                "full_name": "Alice 2",
+                "password": "SecurePass1",
+            },
+        )
         assert resp.status_code == 409

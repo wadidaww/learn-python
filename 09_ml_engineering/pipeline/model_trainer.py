@@ -26,6 +26,7 @@ Vector = list[float]
 # Abstract model interface
 # ---------------------------------------------------------------------------
 
+
 class Model(ABC):
     """Abstract ML model."""
 
@@ -45,6 +46,7 @@ class Model(ABC):
 # ---------------------------------------------------------------------------
 # Utility functions
 # ---------------------------------------------------------------------------
+
 
 def dot(a: Vector, b: Vector) -> float:
     """Dot product of two vectors."""
@@ -72,13 +74,13 @@ def train_test_split(
     indices = list(range(len(X)))
     rng.shuffle(indices)
     n_test = max(1, int(len(X) * test_size))
-    test_idx  = indices[:n_test]
+    test_idx = indices[:n_test]
     train_idx = indices[n_test:]
 
     X_train = [X[i] for i in train_idx]
-    X_test  = [X[i] for i in test_idx]
+    X_test = [X[i] for i in test_idx]
     y_train = [y[i] for i in train_idx]
-    y_test  = [y[i] for i in test_idx]
+    y_test = [y[i] for i in test_idx]
     return X_train, X_test, y_train, y_test
 
 
@@ -102,16 +104,18 @@ def k_fold_split(
 
     for i in range(k):
         val_start = i * fold_size
-        val_end   = val_start + fold_size if i < k - 1 else len(X)
-        val_idx   = indices[val_start:val_end]
+        val_end = val_start + fold_size if i < k - 1 else len(X)
+        val_idx = indices[val_start:val_end]
         train_idx = indices[:val_start] + indices[val_end:]
 
-        folds.append((
-            [X[j] for j in train_idx],
-            [X[j] for j in val_idx],
-            [y[j] for j in train_idx],
-            [y[j] for j in val_idx],
-        ))
+        folds.append(
+            (
+                [X[j] for j in train_idx],
+                [X[j] for j in val_idx],
+                [y[j] for j in train_idx],
+                [y[j] for j in val_idx],
+            )
+        )
 
     return folds
 
@@ -119,6 +123,7 @@ def k_fold_split(
 # ---------------------------------------------------------------------------
 # Logistic Regression (binary classifier)
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class LogisticRegression(Model):
@@ -134,15 +139,15 @@ class LogisticRegression(Model):
     """
 
     learning_rate: float = 0.01
-    max_iter:      int   = 200
-    tol:           float = 1e-4
-    batch_size:    int   = 32
-    random_state:  int   = 42
-    verbose:       bool  = False
+    max_iter: int = 200
+    tol: float = 1e-4
+    batch_size: int = 32
+    random_state: int = 42
+    verbose: bool = False
 
-    weights: Vector       = field(default_factory=list, init=False, repr=False)
-    bias:    float        = field(default=0.0, init=False, repr=False)
-    losses:  list[float]  = field(default_factory=list, init=False, repr=False)
+    weights: Vector = field(default_factory=list, init=False, repr=False)
+    bias: float = field(default=0.0, init=False, repr=False)
+    losses: list[float] = field(default_factory=list, init=False, repr=False)
 
     def _log_loss(self, X: Matrix, y: Vector) -> float:
         total = 0.0
@@ -181,8 +186,7 @@ class LogisticRegression(Model):
 
                 m = len(batch)
                 self.weights = [
-                    w - self.learning_rate * g / m
-                    for w, g in zip(self.weights, grad_w)
+                    w - self.learning_rate * g / m for w, g in zip(self.weights, grad_w)
                 ]
                 self.bias -= self.learning_rate * grad_b / m
 
@@ -214,6 +218,7 @@ class LogisticRegression(Model):
 # K-Nearest Neighbours
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class KNNClassifier(Model):
     """
@@ -240,8 +245,7 @@ class KNNClassifier(Model):
         preds: Vector = []
         for xi in X:
             distances = [
-                (self._distance(xi, xj), yj)
-                for xj, yj in zip(self._X_train, self._y_train)
+                (self._distance(xi, xj), yj) for xj, yj in zip(self._X_train, self._y_train)
             ]
             distances.sort(key=lambda t: t[0])
             k_labels = [label for _, label in distances[: self.k]]
@@ -257,6 +261,7 @@ class KNNClassifier(Model):
 # Cross-validation helper
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CrossValidationResult:
     """Result of k-fold cross-validation."""
@@ -270,6 +275,7 @@ class CrossValidationResult:
     @property
     def std(self) -> float:
         import statistics
+
         return statistics.stdev(self.scores) if len(self.scores) > 1 else 0.0
 
 
@@ -295,6 +301,7 @@ def cross_validate(
         CrossValidationResult with per-fold scores.
     """
     if scorer is None:
+
         def scorer(y_true: Vector, y_pred: Vector) -> float:
             return sum(a == b for a, b in zip(y_true, y_pred)) / len(y_true)
 
@@ -312,6 +319,7 @@ def cross_validate(
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Train a logistic regression on a synthetic dataset."""

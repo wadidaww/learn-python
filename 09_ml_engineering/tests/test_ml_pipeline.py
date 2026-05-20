@@ -31,15 +31,9 @@ from pipeline.feature_engineering import (
     VarianceThresholdSelector,
     to_feature_matrix,
 )
-from pipeline.model_trainer import (
-    KNNClassifier,
-    LogisticRegression,
-    cross_validate,
-    train_test_split,
-)
+from pipeline.model_evaluator import accuracy
+from pipeline.model_evaluator import accuracy as eval_accuracy
 from pipeline.model_evaluator import (
-    accuracy,
-    accuracy as eval_accuracy,
     classification_report,
     confusion_matrix,
     mean_absolute_error,
@@ -48,11 +42,17 @@ from pipeline.model_evaluator import (
     roc_auc,
     root_mean_squared_error,
 )
-
+from pipeline.model_trainer import (
+    KNNClassifier,
+    LogisticRegression,
+    cross_validate,
+    train_test_split,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def make_binary_dataset(
     n: int = 100,
@@ -73,6 +73,7 @@ def make_binary_dataset(
 # ---------------------------------------------------------------------------
 # Feature engineering
 # ---------------------------------------------------------------------------
+
 
 class TestMinMaxScaler:
     def test_output_range(self) -> None:
@@ -144,6 +145,7 @@ class TestVarianceThreshold:
 # Model trainer
 # ---------------------------------------------------------------------------
 
+
 class TestTrainTestSplit:
     def test_sizes(self) -> None:
         X, y = make_binary_dataset(100)
@@ -156,7 +158,7 @@ class TestTrainTestSplit:
         X, y = make_binary_dataset(50)
         X_tr, X_te, _, _ = train_test_split(X, y)
         train_set = set(map(tuple, X_tr))
-        test_set  = set(map(tuple, X_te))
+        test_set = set(map(tuple, X_te))
         assert not train_set.intersection(test_set)
 
 
@@ -189,7 +191,7 @@ class TestKNN:
     def test_perfect_separation(self) -> None:
         X_train = [[0.0, 0.0], [0.1, 0.0], [0.0, 0.1]]
         y_train = [0.0, 0.0, 0.0]
-        X_test  = [[10.0, 10.0]]
+        X_test = [[10.0, 10.0]]
         X_train += [[10.0, 10.0], [9.9, 10.0]]
         y_train += [1.0, 1.0]
         model = KNNClassifier(k=3)
@@ -206,6 +208,7 @@ class TestKNN:
 # ---------------------------------------------------------------------------
 # Evaluator
 # ---------------------------------------------------------------------------
+
 
 class TestAccuracy:
     def test_perfect(self) -> None:
@@ -233,20 +236,20 @@ class TestConfusionMatrix:
         y = [1.0, 0.0, 1.0, 0.0]
         p = [1.0, 1.0, 0.0, 0.0]
         cm = confusion_matrix(y, p)
-        assert cm[(1.0, 1.0)] == 1   # TP
-        assert cm[(0.0, 1.0)] == 1   # FP
-        assert cm[(1.0, 0.0)] == 1   # FN
-        assert cm[(0.0, 0.0)] == 1   # TN
+        assert cm[(1.0, 1.0)] == 1  # TP
+        assert cm[(0.0, 1.0)] == 1  # FP
+        assert cm[(1.0, 0.0)] == 1  # FN
+        assert cm[(0.0, 0.0)] == 1  # TN
 
 
 class TestRocAuc:
     def test_perfect(self) -> None:
-        y     = [1.0, 1.0, 0.0, 0.0]
+        y = [1.0, 1.0, 0.0, 0.0]
         score = [0.9, 0.8, 0.2, 0.1]
         assert roc_auc(y, score) == pytest.approx(1.0)
 
     def test_random(self) -> None:
-        y     = [1.0, 0.0, 1.0, 0.0]
+        y = [1.0, 0.0, 1.0, 0.0]
         score = [0.5, 0.5, 0.5, 0.5]
         assert 0.0 <= roc_auc(y, score) <= 1.0
 
@@ -259,9 +262,7 @@ class TestRegressionMetrics:
     def test_rmse(self) -> None:
         y_true = [1.0, 2.0, 3.0]
         y_pred = [2.0, 2.0, 3.0]
-        assert root_mean_squared_error(y_true, y_pred) == pytest.approx(
-            math.sqrt(1 / 3)
-        )
+        assert root_mean_squared_error(y_true, y_pred) == pytest.approx(math.sqrt(1 / 3))
 
     def test_r2_perfect(self) -> None:
         y = [1.0, 2.0, 3.0]

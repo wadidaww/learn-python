@@ -15,7 +15,6 @@ import time
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-
 # Type aliases defined here to avoid circular import with core.py
 # We use forward references for Request/Response
 Handler = Callable[..., Awaitable[Any]]
@@ -46,9 +45,12 @@ class MiddlewareChain:
         for mw in reversed(self._middleware):
             _current_handler = handler  # closure capture
 
-            async def make_next(request: Any, mw: Middleware = mw, h: Handler = _current_handler) -> Any:
+            async def make_next(
+                request: Any, mw: Middleware = mw, h: Handler = _current_handler
+            ) -> Any:
                 async def call_next(req: Any) -> Any:
                     return await h(req)
+
                 return await mw(request, call_next)
 
             handler = make_next
@@ -58,6 +60,7 @@ class MiddlewareChain:
 # ---------------------------------------------------------------------------
 # Built-in middleware
 # ---------------------------------------------------------------------------
+
 
 async def timing_middleware(request: Any, call_next: Handler) -> Any:
     """Record request processing time in the response headers."""
@@ -72,7 +75,7 @@ async def timing_middleware(request: Any, call_next: Handler) -> Any:
 async def logging_middleware(request: Any, call_next: Handler) -> Any:
     """Log each request to stdout."""
     method = getattr(request, "method", "?")
-    path   = getattr(request, "path", "?")
+    path = getattr(request, "path", "?")
     print(f"  --> {method} {path}")
     response = await call_next(request)
     status = getattr(response, "status", "?")
@@ -97,7 +100,7 @@ def cors_middleware(
     async def _cors(request: Any, call_next: Handler) -> Any:
         response = await call_next(request)
         if hasattr(response, "headers"):
-            response.headers["Access-Control-Allow-Origin"]  = ", ".join(origins)
+            response.headers["Access-Control-Allow-Origin"] = ", ".join(origins)
             response.headers["Access-Control-Allow-Methods"] = ", ".join(methods)
         return response
 
@@ -123,11 +126,15 @@ def rate_limit_middleware(max_requests: int, window_seconds: float) -> Middlewar
 
         if len(timestamps) >= max_requests:
             # Return 429 without a real Response class (use a dict)
-            return type("Response", (), {
-                "status": 429,
-                "body": b"Too Many Requests",
-                "headers": {},
-            })()
+            return type(
+                "Response",
+                (),
+                {
+                    "status": 429,
+                    "body": b"Too Many Requests",
+                    "headers": {},
+                },
+            )()
 
         timestamps.append(now)
         _counts[client_ip] = timestamps

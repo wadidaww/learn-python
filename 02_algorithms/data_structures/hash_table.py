@@ -180,6 +180,7 @@ class HashTable(Generic[K, V]):
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Demonstrate HashTable usage."""
     ht: HashTable[str, int] = HashTable(capacity=4)

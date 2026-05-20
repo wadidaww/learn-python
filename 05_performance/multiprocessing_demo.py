@@ -18,10 +18,10 @@ import time
 from collections.abc import Iterator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # CPU-bound work
 # ---------------------------------------------------------------------------
+
 
 def is_prime(n: int) -> bool:
     """Deterministic primality test (trial division)."""
@@ -52,13 +52,11 @@ def worker_task(chunk: tuple[int, int]) -> tuple[int, int, int]:
 # Demo: Pool.map
 # ---------------------------------------------------------------------------
 
+
 def demo_pool_map(limit: int = 50_000) -> None:
     """Count primes below *limit* using a process pool."""
     chunk_size = limit // mp.cpu_count()
-    chunks = [
-        (i * chunk_size, (i + 1) * chunk_size)
-        for i in range(mp.cpu_count())
-    ]
+    chunks = [(i * chunk_size, (i + 1) * chunk_size) for i in range(mp.cpu_count())]
 
     # Sequential baseline
     start = time.perf_counter()
@@ -84,6 +82,7 @@ def demo_pool_map(limit: int = 50_000) -> None:
 # Demo: Pool.imap_unordered (streaming)
 # ---------------------------------------------------------------------------
 
+
 def demo_imap(numbers: list[int]) -> None:
     """Use imap_unordered to check primality of a batch of numbers."""
     print("\n=== Pool.imap_unordered ===")
@@ -95,6 +94,7 @@ def demo_imap(numbers: list[int]) -> None:
 # ---------------------------------------------------------------------------
 # Demo: multiprocessing.Queue
 # ---------------------------------------------------------------------------
+
 
 def queue_producer(q: "mp.Queue[int]", count: int) -> None:
     """Put *count* items into *q*."""
@@ -136,6 +136,7 @@ def demo_queue() -> None:
 # Demo: shared memory Value
 # ---------------------------------------------------------------------------
 
+
 def increment_counter(counter: "mp.Value[int]", lock: mp.Lock, n: int) -> None:  # type: ignore[type-arg]
     """Increment a shared counter *n* times (process-safe)."""
     for _ in range(n):
@@ -149,10 +150,7 @@ def demo_shared_value() -> None:
     counter = mp.Value("i", 0)
     lock = mp.Lock()
     n_each = 1000
-    procs = [
-        mp.Process(target=increment_counter, args=(counter, lock, n_each))
-        for _ in range(4)
-    ]
+    procs = [mp.Process(target=increment_counter, args=(counter, lock, n_each)) for _ in range(4)]
     for p in procs:
         p.start()
     for p in procs:
@@ -165,6 +163,7 @@ def demo_shared_value() -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Run multiprocessing demonstrations."""

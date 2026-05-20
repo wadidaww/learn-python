@@ -14,21 +14,21 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mini_framework.router import Router
 from mini_framework.core import Application, Request, Response
 from mini_framework.middleware import (
     MiddlewareChain,
-    timing_middleware,
     cors_middleware,
     logging_middleware,
+    timing_middleware,
 )
-from task_queue.queue import TaskQueue, TaskState, Priority
+from mini_framework.router import Router
+from task_queue.queue import Priority, TaskQueue, TaskState
 from task_queue.worker import WorkerPool
-
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def run(coro):  # type: ignore[no-untyped-def]
     return asyncio.get_event_loop().run_until_complete(coro)
@@ -37,6 +37,7 @@ def run(coro):  # type: ignore[no-untyped-def]
 # ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
+
 
 class TestRouter:
     def setup_method(self) -> None:
@@ -95,6 +96,7 @@ class TestRouter:
 # Request / Response
 # ---------------------------------------------------------------------------
 
+
 class TestResponse:
     def test_json(self) -> None:
         r = Response.json({"k": "v"})
@@ -126,6 +128,7 @@ class TestRequest:
 # Application
 # ---------------------------------------------------------------------------
 
+
 class TestApplication:
     def setup_method(self) -> None:
         self.app = Application()
@@ -150,6 +153,7 @@ class TestApplication:
         resp = run(self.app.handle(Request("GET", "/users/99")))
         assert resp.status == 200
         import json
+
         data = json.loads(resp.body)
         assert data["user_id"] == "99"
 
@@ -172,6 +176,7 @@ class TestApplication:
 # ---------------------------------------------------------------------------
 # Middleware
 # ---------------------------------------------------------------------------
+
 
 class TestMiddlewareChain:
     def test_order(self) -> None:
@@ -205,6 +210,7 @@ class TestMiddlewareChain:
 # Task Queue
 # ---------------------------------------------------------------------------
 
+
 class TestTaskQueue:
     def test_enqueue_dequeue(self) -> None:
         async def job() -> int:
@@ -228,10 +234,10 @@ class TestTaskQueue:
             await q.enqueue(job, priority=Priority.HIGH)
             await q.enqueue(job, priority=Priority.NORMAL)
 
-            first  = await q.dequeue()
+            first = await q.dequeue()
             second = await q.dequeue()
             # Higher priority (more negative stored value) dequeues first
-            assert first.max_retries >= 0   # structural check
+            assert first.max_retries >= 0  # structural check
             # All three tasks were enqueued
             assert q.qsize == 1
 
@@ -257,6 +263,7 @@ class TestTaskQueue:
 # ---------------------------------------------------------------------------
 # Worker Pool
 # ---------------------------------------------------------------------------
+
 
 class TestWorkerPool:
     def test_basic(self) -> None:

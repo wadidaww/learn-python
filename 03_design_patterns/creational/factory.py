@@ -12,10 +12,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Product interfaces
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class Message:
@@ -42,6 +42,7 @@ class Notification(ABC):
 # Concrete products
 # ---------------------------------------------------------------------------
 
+
 class EmailNotification(Notification):
     """Sends notifications via email (simulated)."""
 
@@ -50,10 +51,7 @@ class EmailNotification(Notification):
         self._port = port
 
     def send(self, message: Message) -> bool:
-        print(
-            f"[EMAIL] {self._host}:{self._port} → {message.recipient} | "
-            f"{message.subject}"
-        )
+        print(f"[EMAIL] {self._host}:{self._port} → {message.recipient} | " f"{message.subject}")
         return True
 
     def channel(self) -> str:
@@ -90,6 +88,7 @@ class PushNotification(Notification):
 # Factory Method
 # ---------------------------------------------------------------------------
 
+
 class NotificationFactory(ABC):
     """Abstract factory method for creating notifications."""
 
@@ -125,8 +124,8 @@ class SMSNotificationFactory(NotificationFactory):
 
 _REGISTRY: dict[str, type[Notification]] = {
     "email": EmailNotification,
-    "sms":   SMSNotification,
-    "push":  PushNotification,
+    "sms": SMSNotification,
+    "push": PushNotification,
 }
 
 
@@ -143,9 +142,7 @@ def create_notification(channel: str, **kwargs: Any) -> Notification:
     """
     cls = _REGISTRY.get(channel)
     if cls is None:
-        raise ValueError(
-            f"Unknown channel {channel!r}. Available: {sorted(_REGISTRY)}"
-        )
+        raise ValueError(f"Unknown channel {channel!r}. Available: {sorted(_REGISTRY)}")
     return cls(**kwargs)
 
 
@@ -157,6 +154,7 @@ def register_channel(name: str, cls: type[Notification]) -> None:
 # ---------------------------------------------------------------------------
 # Abstract Factory – UI component family
 # ---------------------------------------------------------------------------
+
 
 class Button(ABC):
     @abstractmethod
@@ -233,6 +231,7 @@ def render_login_form(factory: UIFactory) -> list[str]:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate factory patterns."""

@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 9000
-BUFFER_SIZE  = 4096
+BUFFER_SIZE = 4096
 
 
 class TCPServer:
@@ -157,6 +157,7 @@ def simple_client(host: str, port: int, message: str) -> str:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Start the server, send test messages, then shut down."""

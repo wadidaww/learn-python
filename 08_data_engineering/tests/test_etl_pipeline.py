@@ -21,6 +21,8 @@ from pipeline.extractor import (
     JSONStringExtractor,
     MemoryExtractor,
 )
+from pipeline.loader import MemoryLoader, SQLiteLoader
+from pipeline.orchestrator import ETLPipeline
 from pipeline.transformer import (
     AddFieldTransformer,
     DeduplicateTransformer,
@@ -33,9 +35,6 @@ from pipeline.transformer import (
     TypeCoercionTransformer,
     ValidationTransformer,
 )
-from pipeline.loader import MemoryLoader, SQLiteLoader
-from pipeline.orchestrator import ETLPipeline
-
 
 CSV_DATA = """id,name,price,qty
 1,Widget A,9.99,10
@@ -44,15 +43,18 @@ CSV_DATA = """id,name,price,qty
 4,Widget A,9.99,10
 """
 
-JSON_DATA = json.dumps([
-    {"id": "1", "value": "100"},
-    {"id": "2", "value": "200"},
-])
+JSON_DATA = json.dumps(
+    [
+        {"id": "1", "value": "100"},
+        {"id": "2", "value": "200"},
+    ]
+)
 
 
 # ---------------------------------------------------------------------------
 # Extractors
 # ---------------------------------------------------------------------------
+
 
 class TestCSVExtractor:
     def test_basic(self) -> None:
@@ -90,6 +92,7 @@ class TestMemoryExtractor:
 # ---------------------------------------------------------------------------
 # Transformers
 # ---------------------------------------------------------------------------
+
 
 class TestTypeCoercion:
     def test_cast_int(self) -> None:
@@ -186,11 +189,13 @@ class TestValidation:
 
 class TestTransformPipeline:
     def test_chained(self) -> None:
-        pipeline = TransformPipeline([
-            TypeCoercionTransformer({"qty": int, "price": float}),
-            FilterTransformer(lambda r: r["qty"] > 0),
-            AddFieldTransformer("total", lambda r: r["price"] * r["qty"]),
-        ])
+        pipeline = TransformPipeline(
+            [
+                TypeCoercionTransformer({"qty": int, "price": float}),
+                FilterTransformer(lambda r: r["qty"] > 0),
+                AddFieldTransformer("total", lambda r: r["price"] * r["qty"]),
+            ]
+        )
         records = [
             {"qty": "5", "price": "9.99"},
             {"qty": "0", "price": "19.99"},
@@ -203,6 +208,7 @@ class TestTransformPipeline:
 # ---------------------------------------------------------------------------
 # Loaders
 # ---------------------------------------------------------------------------
+
 
 class TestMemoryLoader:
     def test_load(self) -> None:
@@ -229,16 +235,21 @@ class TestSQLiteLoader:
 # ETLPipeline
 # ---------------------------------------------------------------------------
 
+
 class TestETLPipeline:
     def test_full_pipeline(self) -> None:
         memory = MemoryLoader()
         pipeline = (
             ETLPipeline("test")
-            .extract(MemoryExtractor([
-                {"qty": "5", "price": "9.99"},
-                {"qty": "0", "price": "19.99"},
-                {"qty": "3", "price": ""},
-            ]))
+            .extract(
+                MemoryExtractor(
+                    [
+                        {"qty": "5", "price": "9.99"},
+                        {"qty": "0", "price": "19.99"},
+                        {"qty": "3", "price": ""},
+                    ]
+                )
+            )
             .transform(DropNullTransformer(["price"]))
             .transform(TypeCoercionTransformer({"qty": int, "price": float}))
             .transform(FilterTransformer(lambda r: r["qty"] > 0))
@@ -251,10 +262,6 @@ class TestETLPipeline:
 
     def test_pipeline_reports_steps(self) -> None:
         memory = MemoryLoader()
-        pipeline = (
-            ETLPipeline("test")
-            .extract(MemoryExtractor([{"x": 1}]))
-            .load(memory)
-        )
+        pipeline = ETLPipeline("test").extract(MemoryExtractor([{"x": 1}])).load(memory)
         result = pipeline.run()
         assert len(result.steps) >= 2  # at least 1 extract + 1 load

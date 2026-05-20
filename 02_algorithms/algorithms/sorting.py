@@ -24,6 +24,7 @@ T = TypeVar("T")
 # Quicksort — O(n log n) average, O(n²) worst
 # ---------------------------------------------------------------------------
 
+
 def quicksort(arr: list[T]) -> list[T]:
     """
     Return a new sorted list using quicksort with random pivot.
@@ -34,9 +35,9 @@ def quicksort(arr: list[T]) -> list[T]:
     if len(arr) <= 1:
         return list(arr)
     pivot = arr[len(arr) // 2]
-    left   = [x for x in arr if x < pivot]   # type: ignore[operator]
+    left = [x for x in arr if x < pivot]  # type: ignore[operator]
     middle = [x for x in arr if x == pivot]
-    right  = [x for x in arr if x > pivot]   # type: ignore[operator]
+    right = [x for x in arr if x > pivot]  # type: ignore[operator]
     return quicksort(left) + middle + quicksort(right)
 
 
@@ -70,12 +71,13 @@ def quicksort_inplace(arr: list[T], low: int = 0, high: int | None = None) -> No
 # Mergesort — O(n log n) always, O(n) extra space, stable
 # ---------------------------------------------------------------------------
 
+
 def mergesort(arr: list[T]) -> list[T]:
     """Return a new sorted list using mergesort. O(n log n), O(n) space."""
     if len(arr) <= 1:
         return list(arr)
     mid = len(arr) // 2
-    left  = mergesort(arr[:mid])
+    left = mergesort(arr[:mid])
     right = mergesort(arr[mid:])
     return _merge(left, right)
 
@@ -99,6 +101,7 @@ def _merge(left: list[T], right: list[T]) -> list[T]:
 # ---------------------------------------------------------------------------
 # Heapsort — O(n log n) always, O(1) extra space, not stable
 # ---------------------------------------------------------------------------
+
 
 def _heapify(arr: list[T], n: int, root: int) -> None:
     """Max-heapify the subtree rooted at *root* in a heap of size *n*."""
@@ -136,6 +139,7 @@ def heapsort(arr: list[T]) -> list[T]:
 # Insertion sort — O(n²) but O(n) for nearly-sorted data
 # ---------------------------------------------------------------------------
 
+
 def insertion_sort(arr: list[T]) -> list[T]:
     """Return a new sorted list using insertion sort. Best for small or nearly-sorted arrays."""
     result = list(arr)
@@ -153,6 +157,7 @@ def insertion_sort(arr: list[T]) -> list[T]:
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Compare sorting algorithms on a random dataset."""
     import time
@@ -161,9 +166,9 @@ def main() -> None:
     expected = sorted(data)
 
     for name, fn in [
-        ("quicksort",      lambda d: quicksort(d)),
-        ("mergesort",      lambda d: mergesort(d)),
-        ("heapsort",       lambda d: heapsort(d)),
+        ("quicksort", lambda d: quicksort(d)),
+        ("mergesort", lambda d: mergesort(d)),
+        ("heapsort", lambda d: heapsort(d)),
         ("insertion_sort", lambda d: insertion_sort(d[:200])),  # only 200 for speed
     ]:
         start = time.perf_counter()

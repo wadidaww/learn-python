@@ -15,10 +15,10 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-
 # ---------------------------------------------------------------------------
 # Fibonacci
 # ---------------------------------------------------------------------------
+
 
 def fibonacci_memo(n: int) -> int:
     """
@@ -55,6 +55,7 @@ def fibonacci_tabulation(n: int) -> int:
 # ---------------------------------------------------------------------------
 # 0/1 Knapsack
 # ---------------------------------------------------------------------------
+
 
 def knapsack_01(
     capacity: int,
@@ -103,6 +104,7 @@ def knapsack_01(
 # ---------------------------------------------------------------------------
 # Longest Common Subsequence
 # ---------------------------------------------------------------------------
+
 
 def lcs(s1: str, s2: str) -> str:
     """
@@ -158,6 +160,7 @@ def lcs_length(s1: str, s2: str) -> int:
 # Coin Change (minimum coins)
 # ---------------------------------------------------------------------------
 
+
 def coin_change(coins: list[int], amount: int) -> int:
     """
     Return the fewest number of coins needed to make *amount*, or -1.
@@ -195,6 +198,7 @@ def coin_change_ways(coins: list[int], amount: int) -> int:
 # Longest Increasing Subsequence
 # ---------------------------------------------------------------------------
 
+
 def lis_length(arr: list[int]) -> int:
     """
     Return the length of the Longest Increasing Subsequence.
@@ -202,6 +206,7 @@ def lis_length(arr: list[int]) -> int:
     Uses patience sorting for O(n log n).
     """
     import bisect
+
     tails: list[int] = []
     for x in arr:
         pos = bisect.bisect_left(tails, x)
@@ -219,6 +224,7 @@ def lis(arr: list[int]) -> list[int]:
     Time: O(n log n)
     """
     import bisect
+
     n = len(arr)
     if n == 0:
         return []
@@ -250,6 +256,7 @@ def lis(arr: list[int]) -> list[int]:
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Demonstrate DP algorithms."""
     print("=== Fibonacci ===")
@@ -258,7 +265,7 @@ def main() -> None:
 
     print("\n=== Knapsack 0/1 ===")
     weights = [2, 3, 4, 5]
-    values  = [3, 4, 5, 6]
+    values = [3, 4, 5, 6]
     capacity = 8
     max_val, chosen = knapsack_01(capacity, weights, values)
     print(f"  Max value: {max_val}, items: {chosen}")

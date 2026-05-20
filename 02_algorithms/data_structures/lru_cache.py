@@ -21,6 +21,7 @@ V = TypeVar("V")
 # Implementation 1: OrderedDict
 # ---------------------------------------------------------------------------
 
+
 class LRUCacheOrderedDict(Generic[K, V]):
     """
     LRU cache backed by ``collections.OrderedDict``.
@@ -71,6 +72,7 @@ class LRUCacheOrderedDict(Generic[K, V]):
 # ---------------------------------------------------------------------------
 # Implementation 2: Doubly-linked list + hashmap
 # ---------------------------------------------------------------------------
+
 
 class _DLLNode(Generic[K, V]):
     """Node in a doubly-linked list."""
@@ -179,6 +181,7 @@ LRUCache = LRUCacheOrderedDict
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate both LRU cache implementations."""

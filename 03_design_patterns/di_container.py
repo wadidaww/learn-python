@@ -108,8 +108,7 @@ class Container:
             return self._transient_factories[interface]()
 
         raise DIError(
-            f"No registration for {interface.__name__!r}. "
-            "Did you forget to register it?"
+            f"No registration for {interface.__name__!r}. " "Did you forget to register it?"
         )
 
     # ------------------------------------------------------------------
@@ -124,6 +123,7 @@ class Container:
         hints = {}
         try:
             import typing
+
             hints = typing.get_type_hints(cls.__init__)
         except Exception:
             pass
@@ -157,6 +157,7 @@ class Container:
 # ---------------------------------------------------------------------------
 # Example domain classes
 # ---------------------------------------------------------------------------
+
 
 class Logger:
     """Simple console logger."""
@@ -210,6 +211,7 @@ class UserService:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate the DI container."""

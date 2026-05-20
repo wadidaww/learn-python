@@ -27,6 +27,7 @@ DEFAULT_DB = Path.home() / ".todo_app" / "todos.json"
 # Data model
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class TodoItem:
     """A single todo item."""
@@ -34,9 +35,7 @@ class TodoItem:
     id: int
     title: str
     done: bool = False
-    created_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
-    )
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     completed_at: str | None = None
 
     def complete(self) -> None:
@@ -48,6 +47,7 @@ class TodoItem:
 # ---------------------------------------------------------------------------
 # Storage
 # ---------------------------------------------------------------------------
+
 
 class TodoStore:
     """JSON-backed persistent store for TodoItems."""
@@ -109,6 +109,7 @@ class TodoStore:
 # CLI handlers
 # ---------------------------------------------------------------------------
 
+
 def cmd_add(store: TodoStore, args: argparse.Namespace) -> int:
     """Handle 'add' subcommand."""
     item = store.add(args.title)
@@ -155,6 +156,7 @@ def cmd_delete(store: TodoStore, args: argparse.Namespace) -> int:
 # ---------------------------------------------------------------------------
 # Argument parser
 # ---------------------------------------------------------------------------
+
 
 def build_parser() -> argparse.ArgumentParser:
     """Construct and return the CLI argument parser."""

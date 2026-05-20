@@ -19,10 +19,10 @@ import time
 from collections.abc import AsyncGenerator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Basic coroutines and tasks
 # ---------------------------------------------------------------------------
+
 
 async def fetch_data(url: str, delay: float = 0.1) -> dict[str, Any]:
     """Simulate an async HTTP GET request."""
@@ -51,6 +51,7 @@ async def demo_tasks() -> None:
 # ---------------------------------------------------------------------------
 # 2. asyncio.Queue – producer / consumer
 # ---------------------------------------------------------------------------
+
 
 async def producer(queue: asyncio.Queue[int], count: int) -> None:
     """Put *count* items into *queue* with simulated work."""
@@ -94,6 +95,7 @@ async def demo_producer_consumer() -> None:
 # 3. Semaphore – rate limiting
 # ---------------------------------------------------------------------------
 
+
 async def rate_limited_fetch(
     semaphore: asyncio.Semaphore,
     url: str,
@@ -124,6 +126,7 @@ async def demo_semaphore() -> None:
 # 4. Async generators and streaming
 # ---------------------------------------------------------------------------
 
+
 async def stream_integers(n: int) -> AsyncGenerator[int, None]:
     """Async generator that yields integers 0..n-1 with simulated delays."""
     for i in range(n):
@@ -143,6 +146,7 @@ async def demo_async_generator() -> None:
 # ---------------------------------------------------------------------------
 # 5. Timeout handling
 # ---------------------------------------------------------------------------
+
 
 async def slow_operation(delay: float = 2.0) -> str:
     """A simulated slow operation."""
@@ -168,6 +172,7 @@ async def demo_timeouts() -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 async def main() -> None:
     """Run all asyncio demonstrations."""

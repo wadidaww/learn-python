@@ -16,14 +16,14 @@ import math
 from collections import deque
 from typing import Any
 
-
-Graph = dict[str, list[tuple[str, int]]]    # weighted
-UGraph = dict[str, list[str]]               # unweighted
+Graph = dict[str, list[tuple[str, int]]]  # weighted
+UGraph = dict[str, list[str]]  # unweighted
 
 
 # ---------------------------------------------------------------------------
 # Breadth-First Search
 # ---------------------------------------------------------------------------
+
 
 def bfs(graph: UGraph, start: str) -> list[str]:
     """
@@ -78,6 +78,7 @@ def bfs_shortest_path(graph: UGraph, start: str, end: str) -> list[str] | None:
 # Depth-First Search
 # ---------------------------------------------------------------------------
 
+
 def dfs_iterative(graph: UGraph, start: str) -> list[str]:
     """
     Return nodes visited in DFS order (iterative, using an explicit stack).
@@ -122,6 +123,7 @@ def dfs_recursive(
 # ---------------------------------------------------------------------------
 # Dijkstra's shortest path
 # ---------------------------------------------------------------------------
+
 
 def dijkstra(graph: Graph, start: str) -> tuple[dict[str, float], dict[str, str | None]]:
     """
@@ -181,6 +183,7 @@ def reconstruct_path(
 # Topological Sort (Kahn's algorithm)
 # ---------------------------------------------------------------------------
 
+
 def topological_sort(graph: UGraph) -> list[str] | None:
     """
     Return a topological ordering of nodes in a DAG, or None if a cycle exists.
@@ -193,9 +196,7 @@ def topological_sort(graph: UGraph) -> list[str] | None:
         for neighbor in graph[node]:
             in_degree[neighbor] = in_degree.get(neighbor, 0) + 1
 
-    queue: deque[str] = deque(
-        node for node, deg in in_degree.items() if deg == 0
-    )
+    queue: deque[str] = deque(node for node, deg in in_degree.items() if deg == 0)
     order: list[str] = []
 
     while queue:
@@ -215,6 +216,7 @@ def topological_sort(graph: UGraph) -> list[str] | None:
 # ---------------------------------------------------------------------------
 # Strongly Connected Components (Kosaraju's algorithm)
 # ---------------------------------------------------------------------------
+
 
 def strongly_connected_components(graph: UGraph) -> list[list[str]]:
     """
@@ -264,6 +266,7 @@ def strongly_connected_components(graph: UGraph) -> list[list[str]]:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate graph algorithms."""

@@ -26,8 +26,10 @@ F = TypeVar("F", bound=Callable[..., Any])
 # 1. Function decorators
 # ---------------------------------------------------------------------------
 
+
 def timer(func: F) -> F:
     """Decorator that logs the execution time of *func*."""
+
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.perf_counter()
@@ -35,6 +37,7 @@ def timer(func: F) -> F:
         elapsed = time.perf_counter() - start
         print(f"[timer] {func.__name__} took {elapsed * 1000:.2f} ms")
         return result
+
     return wrapper  # type: ignore[return-value]
 
 
@@ -59,6 +62,7 @@ def retry(
     exceptions: tuple[type[BaseException], ...] = (Exception,),
 ) -> Callable[[F], F]:
     """Parameterised retry decorator."""
+
     def decorator(func: F) -> F:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -71,14 +75,18 @@ def retry(
                     if delay > 0:
                         time.sleep(delay)
             raise RuntimeError(f"Failed after {max_attempts} attempts") from last
+
         return wrapper  # type: ignore[return-value]
+
     return decorator
 
 
 def validate_positive(*param_names: str) -> Callable[[F], F]:
     """Decorator that ensures named parameters are positive numbers."""
+
     def decorator(func: F) -> F:
         import inspect
+
         sig = inspect.signature(func)
 
         @functools.wraps(func)
@@ -91,13 +99,16 @@ def validate_positive(*param_names: str) -> Callable[[F], F]:
                     if not isinstance(val, (int, float)) or val <= 0:
                         raise ValueError(f"Parameter '{name}' must be positive, got {val!r}")
             return func(*args, **kwargs)
+
         return wrapper  # type: ignore[return-value]
+
     return decorator
 
 
 # ---------------------------------------------------------------------------
 # 2. Class-based Decorator (structural pattern)
 # ---------------------------------------------------------------------------
+
 
 class Component:
     """Base component interface."""
@@ -178,6 +189,7 @@ class PricingDecorator(ComponentDecorator):
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate decorator patterns."""

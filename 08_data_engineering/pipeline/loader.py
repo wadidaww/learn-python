@@ -24,6 +24,7 @@ Record = dict[str, Any]
 # Base loader
 # ---------------------------------------------------------------------------
 
+
 class Loader(ABC):
     """Abstract base class for all loaders."""
 
@@ -43,6 +44,7 @@ class Loader(ABC):
 # ---------------------------------------------------------------------------
 # CSV loader
 # ---------------------------------------------------------------------------
+
 
 class CSVLoader(Loader):
     """
@@ -82,6 +84,7 @@ class CSVLoader(Loader):
 # JSON loader
 # ---------------------------------------------------------------------------
 
+
 class JSONLoader(Loader):
     """
     Write records to a JSON file as an array.
@@ -99,6 +102,7 @@ class JSONLoader(Loader):
 
     def load(self, records: list[Record]) -> int:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+
         # Ensure JSON-serialisable (convert non-JSON types)
         def _default(obj: Any) -> str:
             return str(obj)
@@ -111,6 +115,7 @@ class JSONLoader(Loader):
 # ---------------------------------------------------------------------------
 # SQLite loader
 # ---------------------------------------------------------------------------
+
 
 class SQLiteLoader(Loader):
     """
@@ -152,9 +157,7 @@ class SQLiteLoader(Loader):
     def _ensure_table(self, conn: sqlite3.Connection, columns: list[str]) -> None:
         """Create table if it doesn't exist."""
         col_defs = ", ".join(f'"{c}" TEXT' for c in columns)
-        conn.execute(
-            f'CREATE TABLE IF NOT EXISTS "{self.table}" ({col_defs})'
-        )
+        conn.execute(f'CREATE TABLE IF NOT EXISTS "{self.table}" ({col_defs})')
 
     def load(self, records: list[Record]) -> int:
         if not records:
@@ -169,7 +172,7 @@ class SQLiteLoader(Loader):
         self._ensure_table(conn, columns)
 
         placeholders = ", ".join("?" * len(columns))
-        col_names    = ", ".join(f'"{c}"' for c in columns)
+        col_names = ", ".join(f'"{c}"' for c in columns)
         sql = f'INSERT INTO "{self.table}" ({col_names}) VALUES ({placeholders})'
 
         rows = [tuple(str(r.get(c, "")) for c in columns) for r in records]
@@ -188,6 +191,7 @@ class SQLiteLoader(Loader):
 # ---------------------------------------------------------------------------
 # In-memory loader (for testing)
 # ---------------------------------------------------------------------------
+
 
 class MemoryLoader(Loader):
     """Append records to an in-memory list."""

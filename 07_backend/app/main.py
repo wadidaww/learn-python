@@ -13,10 +13,12 @@ Features:
 from __future__ import annotations
 
 try:
+    from collections.abc import AsyncGenerator
+    from contextlib import asynccontextmanager
+
     from fastapi import FastAPI
     from fastapi.middleware.cors import CORSMiddleware
-    from contextlib import asynccontextmanager
-    from collections.abc import AsyncGenerator
+
     FASTAPI_AVAILABLE = True
 except ImportError:  # pragma: no cover
     FASTAPI_AVAILABLE = False

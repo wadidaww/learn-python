@@ -7,7 +7,6 @@ Shared pytest fixtures for Module 04.
 from __future__ import annotations
 
 import pytest
-
 from examples.calculator import Calculator
 
 

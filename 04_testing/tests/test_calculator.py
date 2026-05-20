@@ -15,7 +15,6 @@ import math
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from examples.calculator import (
     Calculator,
     CalculatorError,
@@ -24,10 +23,10 @@ from examples.calculator import (
     Operation,
 )
 
-
 # ---------------------------------------------------------------------------
 # Basic arithmetic
 # ---------------------------------------------------------------------------
+
 
 class TestAdd:
     def test_positive(self, calc: Calculator) -> None:
@@ -47,23 +46,29 @@ class TestAdd:
 
 
 class TestSubtract:
-    @pytest.mark.parametrize("a, b, expected", [
-        (10, 3, 7),
-        (0, 0, 0),
-        (-5, -3, -2),
-        (1.5, 0.5, 1.0),
-    ])
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (10, 3, 7),
+            (0, 0, 0),
+            (-5, -3, -2),
+            (1.5, 0.5, 1.0),
+        ],
+    )
     def test_subtract(self, calc: Calculator, a: float, b: float, expected: float) -> None:
         assert calc.subtract(a, b) == pytest.approx(expected)
 
 
 class TestMultiply:
-    @pytest.mark.parametrize("a, b, expected", [
-        (3, 4, 12),
-        (0, 100, 0),
-        (-3, 4, -12),
-        (2.5, 4, 10.0),
-    ])
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (3, 4, 12),
+            (0, 100, 0),
+            (-3, 4, -12),
+            (2.5, 4, 10.0),
+        ],
+    )
     def test_multiply(self, calc: Calculator, a: float, b: float, expected: float) -> None:
         assert calc.multiply(a, b) == pytest.approx(expected)
 
@@ -89,12 +94,15 @@ class TestDivide:
 
 
 class TestPower:
-    @pytest.mark.parametrize("base, exp, expected", [
-        (2, 10, 1024),
-        (2, 0, 1),
-        (5, -1, 0.2),
-        (9, 0.5, 3.0),
-    ])
+    @pytest.mark.parametrize(
+        "base, exp, expected",
+        [
+            (2, 10, 1024),
+            (2, 0, 1),
+            (5, -1, 0.2),
+            (9, 0.5, 3.0),
+        ],
+    )
     def test_power(self, calc: Calculator, base: float, exp: float, expected: float) -> None:
         assert calc.power(base, exp) == pytest.approx(expected)
 
@@ -127,6 +135,7 @@ class TestModulo:
 # Utility methods
 # ---------------------------------------------------------------------------
 
+
 class TestUtilities:
     def test_percent(self, calc: Calculator) -> None:
         assert calc.percent(200, 25) == 50.0
@@ -150,6 +159,7 @@ class TestUtilities:
 # ---------------------------------------------------------------------------
 # History
 # ---------------------------------------------------------------------------
+
 
 class TestHistory:
     def test_records_operations(self, calc_with_history: Calculator) -> None:
@@ -180,6 +190,7 @@ class TestHistory:
 # ---------------------------------------------------------------------------
 # Mock-based tests
 # ---------------------------------------------------------------------------
+
 
 class TestWithMocks:
     def test_mock_divide_called(self) -> None:

@@ -23,10 +23,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Base extractor
 # ---------------------------------------------------------------------------
+
 
 class Extractor(ABC):
     """Abstract base class for all data extractors."""
@@ -42,6 +42,7 @@ class Extractor(ABC):
 # ---------------------------------------------------------------------------
 # CSV extractor
 # ---------------------------------------------------------------------------
+
 
 class CSVExtractor(Extractor):
     """
@@ -86,6 +87,7 @@ class CSVStringExtractor(Extractor):
 # JSON extractor
 # ---------------------------------------------------------------------------
 
+
 class JSONExtractor(Extractor):
     """
     Extract records from a JSON file.
@@ -103,9 +105,7 @@ class JSONExtractor(Extractor):
         if self.root_key:
             data = data[self.root_key]
         if not isinstance(data, list):
-            raise ValueError(
-                f"Expected a JSON array, got {type(data).__name__}"
-            )
+            raise ValueError(f"Expected a JSON array, got {type(data).__name__}")
         return [dict(row) for row in data]
 
 
@@ -128,6 +128,7 @@ class JSONStringExtractor(Extractor):
 # ---------------------------------------------------------------------------
 # URL / API extractor
 # ---------------------------------------------------------------------------
+
 
 class URLExtractor(Extractor):
     """
@@ -160,6 +161,7 @@ class URLExtractor(Extractor):
             return list(data)
         except (urllib.error.URLError, json.JSONDecodeError, KeyError) as exc:
             import logging
+
             logging.getLogger(__name__).warning("URLExtractor failed: %s", exc)
             return []
 
@@ -167,6 +169,7 @@ class URLExtractor(Extractor):
 # ---------------------------------------------------------------------------
 # In-memory extractor
 # ---------------------------------------------------------------------------
+
 
 class MemoryExtractor(Extractor):
     """Extract records from an in-memory list (useful for testing)."""

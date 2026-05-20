@@ -52,6 +52,7 @@ INFO 2024-01-15T09:15:00 [app] Daily backup completed
 # Data model
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class LogEntry:
     """A single parsed log entry."""
@@ -84,6 +85,7 @@ class LogEntry:
 # ---------------------------------------------------------------------------
 # Analyzer
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class AnalysisReport:
@@ -139,7 +141,7 @@ class LogAnalyzer:
 
         level_counts = Counter(e.level for e in self._entries)
         module_counts = Counter(e.module for e in self._entries)
-        errors   = [e for e in self._entries if e.level in ("ERROR", "CRITICAL")]
+        errors = [e for e in self._entries if e.level in ("ERROR", "CRITICAL")]
         warnings = [e for e in self._entries if e.level == "WARNING"]
         timestamps = [e.timestamp for e in self._entries if e.timestamp != datetime.min]
         time_range = (min(timestamps), max(timestamps)) if timestamps else None
@@ -171,6 +173,7 @@ class LogAnalyzer:
 # Report printer
 # ---------------------------------------------------------------------------
 
+
 def print_report(report: AnalysisReport) -> None:
     """Pretty-print an AnalysisReport to stdout."""
     sep = "=" * 55
@@ -194,9 +197,7 @@ def print_report(report: AnalysisReport) -> None:
 
     print()
     print("  Module breakdown:")
-    for module, count in sorted(
-        report.module_counts.items(), key=lambda kv: kv[1], reverse=True
-    ):
+    for module, count in sorted(report.module_counts.items(), key=lambda kv: kv[1], reverse=True):
         print(f"    {module:<15} {count:>4}")
 
     if report.errors:
@@ -211,6 +212,7 @@ def print_report(report: AnalysisReport) -> None:
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def build_parser() -> argparse.ArgumentParser:
     """Return the argument parser."""

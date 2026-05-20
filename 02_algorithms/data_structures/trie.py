@@ -149,6 +149,7 @@ class Trie:
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Demonstrate Trie usage."""
     trie = Trie()

@@ -20,6 +20,7 @@ from typing import Any
 try:
     from fastapi import FastAPI, HTTPException, status
     from pydantic import BaseModel, Field
+
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
@@ -27,6 +28,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Pure-Python model registry (works without FastAPI)
 # ---------------------------------------------------------------------------
+
 
 class ModelRegistry:
     """Simple in-memory model registry."""
@@ -45,8 +47,8 @@ class ModelRegistry:
         """Register a model under *name*."""
         self._models[name] = model
         self._metadata[name] = {
-            "name":        name,
-            "version":     version,
+            "name": name,
+            "version": version,
             "description": description,
             "registered_at": time.time(),
         }
@@ -75,6 +77,7 @@ def get_registry() -> ModelRegistry:
 
 
 if FASTAPI_AVAILABLE:
+
     class PredictRequest(BaseModel):
         features: list[float] = Field(..., description="Feature vector")
         model_name: str = Field("default", description="Registered model name")

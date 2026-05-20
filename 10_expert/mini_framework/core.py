@@ -16,26 +16,26 @@ from dataclasses import dataclass, field
 from http import HTTPStatus
 from typing import Any
 
+from mini_framework.middleware import MiddlewareChain, logging_middleware, timing_middleware
 from mini_framework.router import Router
-from mini_framework.middleware import MiddlewareChain, timing_middleware, logging_middleware
-
 
 # ---------------------------------------------------------------------------
 # Request and Response
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Request:
     """Represents an incoming HTTP request."""
 
-    method:    str
-    path:      str
-    headers:   dict[str, str] = field(default_factory=dict)
-    body:      bytes          = field(default=b"")
-    params:    dict[str, str] = field(default_factory=dict)
-    query:     dict[str, str] = field(default_factory=dict)
-    client_ip: str            = field(default="127.0.0.1")
-    state:     dict[str, Any] = field(default_factory=dict)
+    method: str
+    path: str
+    headers: dict[str, str] = field(default_factory=dict)
+    body: bytes = field(default=b"")
+    params: dict[str, str] = field(default_factory=dict)
+    query: dict[str, str] = field(default_factory=dict)
+    client_ip: str = field(default="127.0.0.1")
+    state: dict[str, Any] = field(default_factory=dict)
 
     def json(self) -> Any:
         """Parse request body as JSON."""
@@ -50,9 +50,9 @@ class Request:
 class Response:
     """Represents an outgoing HTTP response."""
 
-    status:  int              = 200
-    body:    bytes            = field(default=b"")
-    headers: dict[str, str]   = field(default_factory=dict)
+    status: int = 200
+    body: bytes = field(default=b"")
+    headers: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def json(
@@ -107,6 +107,7 @@ Handler = Callable[[Request], Awaitable[Response]]
 # Application
 # ---------------------------------------------------------------------------
 
+
 class Application:
     """
     The mini web framework application.
@@ -154,6 +155,7 @@ class Application:
                     {"error": f"Not Found: {req.path}"},
                     status=404,
                 )
+
             core_handler: Handler = not_found_handler
         else:
             route_handler, path_params = resolved
@@ -179,6 +181,7 @@ class Application:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 async def demo() -> None:
     """Demonstrate the mini framework without a real server."""

@@ -11,10 +11,10 @@ from __future__ import annotations
 
 import threading
 
-
 # ---------------------------------------------------------------------------
 # 1. Metaclass Singleton
 # ---------------------------------------------------------------------------
+
 
 class SingletonMeta(type):
     """
@@ -76,6 +76,7 @@ class ApplicationConfig(metaclass=SingletonMeta):
 # 2. Decorator Singleton
 # ---------------------------------------------------------------------------
 
+
 def singleton(cls: type) -> type:
     """
     Class decorator that turns *cls* into a Singleton.
@@ -123,6 +124,7 @@ class DatabasePool:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate Singleton patterns."""

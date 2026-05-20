@@ -15,28 +15,28 @@ from __future__ import annotations
 import asyncio
 import time
 import uuid
-from collections.abc import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # Priority and State
 # ---------------------------------------------------------------------------
 
+
 class Priority(IntEnum):
-    LOW      = 0
-    NORMAL   = 10
-    HIGH     = 20
+    LOW = 0
+    NORMAL = 10
+    HIGH = 20
     CRITICAL = 30
 
 
 class TaskState:
-    PENDING  = "pending"
-    RUNNING  = "running"
-    DONE     = "done"
-    FAILED   = "failed"
+    PENDING = "pending"
+    RUNNING = "running"
+    DONE = "done"
+    FAILED = "failed"
     RETRYING = "retrying"
 
 
@@ -55,19 +55,19 @@ class Task:
     Ordering: higher priority tasks run first (max-heap via negation).
     """
 
-    priority:      int       = field(compare=True, default=Priority.NORMAL)
-    created_at:    float     = field(compare=True, default_factory=time.time)
-    task_id:       str       = field(compare=False, default_factory=lambda: str(uuid.uuid4()))
-    func:          Any       = field(compare=False, repr=False, default=None)
-    args:          tuple     = field(compare=False, repr=False, default_factory=tuple)
-    kwargs:        dict      = field(compare=False, repr=False, default_factory=dict)
-    max_retries:   int       = field(compare=False, default=3)
-    retry_delay:   float     = field(compare=False, default=0.1)
-    state:         str       = field(compare=False, default=TaskState.PENDING)
-    result:        Any       = field(compare=False, default=None)
-    error:         str | None = field(compare=False, default=None)
-    attempt:       int       = field(compare=False, default=0)
-    completed_at:  float | None = field(compare=False, default=None)
+    priority: int = field(compare=True, default=Priority.NORMAL)
+    created_at: float = field(compare=True, default_factory=time.time)
+    task_id: str = field(compare=False, default_factory=lambda: str(uuid.uuid4()))
+    func: Any = field(compare=False, repr=False, default=None)
+    args: tuple = field(compare=False, repr=False, default_factory=tuple)
+    kwargs: dict = field(compare=False, repr=False, default_factory=dict)
+    max_retries: int = field(compare=False, default=3)
+    retry_delay: float = field(compare=False, default=0.1)
+    state: str = field(compare=False, default=TaskState.PENDING)
+    result: Any = field(compare=False, default=None)
+    error: str | None = field(compare=False, default=None)
+    attempt: int = field(compare=False, default=0)
+    completed_at: float | None = field(compare=False, default=None)
 
     def __post_init__(self) -> None:
         # Negate priority so that higher-priority tasks sort first in asyncio.PriorityQueue
@@ -77,6 +77,7 @@ class Task:
 # ---------------------------------------------------------------------------
 # Queue
 # ---------------------------------------------------------------------------
+
 
 class TaskQueue:
     """
@@ -159,10 +160,16 @@ class TaskQueue:
 
     @property
     def stats(self) -> dict[str, int]:
-        counts = {s: 0 for s in (
-            TaskState.PENDING, TaskState.RUNNING, TaskState.DONE,
-            TaskState.FAILED, TaskState.RETRYING
-        )}
+        counts = {
+            s: 0
+            for s in (
+                TaskState.PENDING,
+                TaskState.RUNNING,
+                TaskState.DONE,
+                TaskState.FAILED,
+                TaskState.RETRYING,
+            )
+        }
         for t in self._tasks.values():
             counts[t.state] = counts.get(t.state, 0) + 1
         return counts

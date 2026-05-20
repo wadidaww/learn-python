@@ -14,13 +14,13 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
-
 Record = dict[str, Any]
 
 
 # ---------------------------------------------------------------------------
 # Base transformer
 # ---------------------------------------------------------------------------
+
 
 class Transformer(ABC):
     """Abstract base class for all transformers."""
@@ -36,6 +36,7 @@ class Transformer(ABC):
 # ---------------------------------------------------------------------------
 # Type coercion
 # ---------------------------------------------------------------------------
+
 
 class TypeCoercionTransformer(Transformer):
     """
@@ -77,6 +78,7 @@ class TypeCoercionTransformer(Transformer):
 # Filtering
 # ---------------------------------------------------------------------------
 
+
 class FilterTransformer(Transformer):
     """
     Keep only records matching *predicate*.
@@ -101,16 +103,15 @@ class DropNullTransformer(Transformer):
 
     def transform(self, records: list[Record]) -> list[Record]:
         def is_valid(rec: Record) -> bool:
-            return all(
-                rec.get(f) not in (None, "", "NULL", "N/A")
-                for f in self.required_fields
-            )
+            return all(rec.get(f) not in (None, "", "NULL", "N/A") for f in self.required_fields)
+
         return [r for r in records if is_valid(r)]
 
 
 # ---------------------------------------------------------------------------
 # Field manipulation
 # ---------------------------------------------------------------------------
+
 
 class RenameTransformer(Transformer):
     """Rename columns according to *mapping* (old_name → new_name)."""
@@ -156,6 +157,7 @@ class AddFieldTransformer(Transformer):
 # Text normalisation
 # ---------------------------------------------------------------------------
 
+
 class NormalizeStringTransformer(Transformer):
     """Strip whitespace and optionally lowercase string fields."""
 
@@ -179,6 +181,7 @@ class NormalizeStringTransformer(Transformer):
 # ---------------------------------------------------------------------------
 # Deduplication
 # ---------------------------------------------------------------------------
+
 
 class DeduplicateTransformer(Transformer):
     """
@@ -205,6 +208,7 @@ class DeduplicateTransformer(Transformer):
 # Validation
 # ---------------------------------------------------------------------------
 
+
 class ValidationTransformer(Transformer):
     """
     Validate records against a schema of {field: validator_func}.
@@ -228,9 +232,7 @@ class ValidationTransformer(Transformer):
                 value = rec.get(field)
                 if not validator(value):
                     if not self.drop_invalid:
-                        raise ValueError(
-                            f"Validation failed: {field}={value!r}"
-                        )
+                        raise ValueError(f"Validation failed: {field}={value!r}")
                     valid = False
                     break
             if valid:
@@ -241,6 +243,7 @@ class ValidationTransformer(Transformer):
 # ---------------------------------------------------------------------------
 # Pipeline combinator
 # ---------------------------------------------------------------------------
+
 
 class TransformPipeline(Transformer):
     """

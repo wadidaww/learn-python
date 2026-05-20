@@ -15,26 +15,27 @@ import pytest
 # Ensure 03_design_patterns is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from creational.singleton import ApplicationConfig, DatabasePool, SingletonMeta
-from creational.factory import (
-    EmailNotification,
-    Message,
-    SMSNotification,
-    create_notification,
-    render_login_form,
-    WebUIFactory,
-    MobileUIFactory,
-)
 from behavioral.observer import AlertObserver, EventBus, StockSubject
 from behavioral.strategy import (
     CreditCardPayment,
     DataSorter,
-    PercentageDiscount,
     FlatDiscount,
     NoDiscount,
+    PercentageDiscount,
     QuickSortStrategy,
     ShoppingCart,
 )
+from creational.factory import (
+    EmailNotification,
+    Message,
+    MobileUIFactory,
+    SMSNotification,
+    WebUIFactory,
+    create_notification,
+    render_login_form,
+)
+from creational.singleton import ApplicationConfig, DatabasePool, SingletonMeta
+from di_container import Container, DIError, InMemoryDatabase, Logger, UserService
 from structural.decorator import (
     CachingDecorator,
     ConcreteComponent,
@@ -44,12 +45,11 @@ from structural.decorator import (
     timer,
     validate_positive,
 )
-from di_container import Container, DIError, InMemoryDatabase, Logger, UserService
-
 
 # ---------------------------------------------------------------------------
 # Singleton
 # ---------------------------------------------------------------------------
+
 
 class TestSingleton:
     def setup_method(self) -> None:
@@ -85,6 +85,7 @@ class TestSingleton:
 # Factory
 # ---------------------------------------------------------------------------
 
+
 class TestFactory:
     def test_create_email(self) -> None:
         n = create_notification("email")
@@ -116,6 +117,7 @@ class TestFactory:
 # ---------------------------------------------------------------------------
 # Observer
 # ---------------------------------------------------------------------------
+
 
 class TestObserver:
     def test_notified_on_price_change(self) -> None:
@@ -172,6 +174,7 @@ class TestEventBus:
 # Strategy
 # ---------------------------------------------------------------------------
 
+
 class TestStrategy:
     def test_credit_card_payment(self) -> None:
         p = CreditCardPayment("4111111111111234", "12/26", "123")
@@ -201,6 +204,7 @@ class TestStrategy:
 # ---------------------------------------------------------------------------
 # Decorator
 # ---------------------------------------------------------------------------
+
 
 class TestDecorator:
     def test_memoize_caches(self) -> None:
@@ -247,6 +251,7 @@ class TestDecorator:
 # DI Container
 # ---------------------------------------------------------------------------
 
+
 class TestDIContainer:
     def test_resolve_singleton(self) -> None:
         c = Container()
@@ -257,6 +262,7 @@ class TestDIContainer:
 
     def test_resolve_transient(self) -> None:
         from di_container import Database, UserRepository
+
         c = Container()
         c.register_singleton(Logger)
         c.register_singleton(Database, InMemoryDatabase)
@@ -267,6 +273,7 @@ class TestDIContainer:
 
     def test_auto_wire(self) -> None:
         from di_container import Database, UserRepository
+
         c = Container()
         c.register_singleton(Logger)
         c.register_singleton(Database, InMemoryDatabase)

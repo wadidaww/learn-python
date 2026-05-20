@@ -17,10 +17,10 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Text files with pathlib
 # ---------------------------------------------------------------------------
+
 
 def write_text_file(path: Path, content: str) -> None:
     """Write *content* to *path*, creating parent directories as needed."""
@@ -55,6 +55,7 @@ def grep_file(path: Path, pattern: str) -> list[tuple[int, str]]:
 # ---------------------------------------------------------------------------
 # 2. CSV
 # ---------------------------------------------------------------------------
+
 
 def write_csv(path: Path, headers: list[str], rows: list[list[Any]]) -> None:
     """Write *rows* to a CSV file at *path*."""
@@ -99,6 +100,7 @@ def csv_to_typed(
 # 3. JSON
 # ---------------------------------------------------------------------------
 
+
 def write_json(path: Path, data: Any, indent: int = 2) -> None:
     """Serialise *data* to a JSON file at *path*."""
     with path.open("w", encoding="utf-8") as fh:
@@ -130,6 +132,7 @@ def merge_json_files(paths: list[Path]) -> dict[str, Any]:
 # 4. Binary files
 # ---------------------------------------------------------------------------
 
+
 def write_binary(path: Path, data: bytes) -> None:
     """Write raw bytes to *path*."""
     path.write_bytes(data)
@@ -143,6 +146,7 @@ def read_binary(path: Path) -> bytes:
 # ---------------------------------------------------------------------------
 # 5. Pathlib utilities
 # ---------------------------------------------------------------------------
+
 
 def list_files(directory: Path, suffix: str = "") -> list[Path]:
     """
@@ -163,6 +167,7 @@ def safe_copy(src: Path, dst: Path) -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Run I/O demonstrations using a temporary directory."""

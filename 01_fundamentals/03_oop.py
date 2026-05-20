@@ -14,10 +14,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import ClassVar
 
-
 # ---------------------------------------------------------------------------
 # 1. Abstract base class + polymorphism
 # ---------------------------------------------------------------------------
+
 
 class Shape(ABC):
     """Abstract base class for 2-D geometric shapes."""
@@ -33,8 +33,7 @@ class Shape(ABC):
     def describe(self) -> str:
         """Human-readable description (uses concrete implementations)."""
         return (
-            f"{type(self).__name__}: "
-            f"area={self.area():.4f}, perimeter={self.perimeter():.4f}"
+            f"{type(self).__name__}: " f"area={self.area():.4f}, perimeter={self.perimeter():.4f}"
         )
 
     def __repr__(self) -> str:
@@ -55,7 +54,7 @@ class Circle(Shape):
         return self._radius
 
     def area(self) -> float:
-        return math.pi * self._radius ** 2
+        return math.pi * self._radius**2
 
     def perimeter(self) -> float:
         return 2 * math.pi * self._radius
@@ -98,6 +97,7 @@ class Square(Rectangle):
 # ---------------------------------------------------------------------------
 # 2. Dataclasses
 # ---------------------------------------------------------------------------
+
 
 @dataclass(order=True)
 class Point:
@@ -147,6 +147,7 @@ class Employee:
 # 3. Properties with validation
 # ---------------------------------------------------------------------------
 
+
 class Temperature:
     """Temperature with Celsius storage and Fahrenheit/Kelvin views."""
 
@@ -186,12 +187,14 @@ class Temperature:
 # 4. Mixin pattern
 # ---------------------------------------------------------------------------
 
+
 class JSONSerializableMixin:
     """Mixin that adds simple JSON serialisation to dataclasses."""
 
     def to_dict(self) -> dict[str, object]:
         """Return instance fields as a plain dict."""
         import dataclasses
+
         if dataclasses.is_dataclass(self):
             return dataclasses.asdict(self)  # type: ignore[arg-type]
         return vars(self)
@@ -211,6 +214,7 @@ class Product(JSONSerializableMixin):
 # 5. Slots for memory efficiency
 # ---------------------------------------------------------------------------
 
+
 class Vector3D:
     """A 3-D vector using __slots__ for lower memory overhead."""
 
@@ -229,7 +233,7 @@ class Vector3D:
 
     def magnitude(self) -> float:
         """Return the Euclidean norm."""
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def dot(self, other: Vector3D) -> float:
         """Dot product with *other*."""
@@ -242,6 +246,7 @@ class Vector3D:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Run OOP demonstrations."""

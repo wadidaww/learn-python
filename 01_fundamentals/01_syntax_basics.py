@@ -13,10 +13,10 @@ import math
 from collections.abc import Generator, Iterator
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Variables and built-in types
 # ---------------------------------------------------------------------------
+
 
 def demonstrate_types() -> None:
     """Show Python's common built-in types with annotations."""
@@ -39,6 +39,7 @@ def demonstrate_types() -> None:
 # ---------------------------------------------------------------------------
 # 2. Strings
 # ---------------------------------------------------------------------------
+
 
 def demonstrate_strings() -> None:
     """Common string operations and formatting."""
@@ -66,6 +67,7 @@ def demonstrate_strings() -> None:
 # ---------------------------------------------------------------------------
 # 3. Control flow
 # ---------------------------------------------------------------------------
+
 
 def grade(score: int) -> str:
     """Return letter grade for a numeric score using match statement."""
@@ -101,6 +103,7 @@ def fizzbuzz(n: int) -> list[str]:
 # 4. Functions
 # ---------------------------------------------------------------------------
 
+
 def clamp(value: float, low: float, high: float) -> float:
     """Clamp *value* to [low, high] range."""
     return max(low, min(high, value))
@@ -108,7 +111,7 @@ def clamp(value: float, low: float, high: float) -> float:
 
 def power(base: float, exp: int = 2) -> float:
     """Return base raised to exp (default: squared)."""
-    return base ** exp
+    return base**exp
 
 
 def multi_return(s: str) -> tuple[int, int, str]:
@@ -125,17 +128,18 @@ def variadic(*args: int, multiplier: int = 1) -> int:
 # 5. Comprehensions
 # ---------------------------------------------------------------------------
 
+
 def demonstrate_comprehensions() -> None:
     """List, dict, set, and generator comprehensions."""
-    squares = [x ** 2 for x in range(10)]
-    evens   = [x for x in range(20) if x % 2 == 0]
-    nested  = [x * y for x in range(1, 4) for y in range(1, 4)]
+    squares = [x**2 for x in range(10)]
+    evens = [x for x in range(20) if x % 2 == 0]
+    nested = [x * y for x in range(1, 4) for y in range(1, 4)]
 
     word_lengths: dict[str, int] = {w: len(w) for w in ["apple", "banana", "cherry"]}
-    unique_chars: set[str]       = {c.lower() for c in "Hello World" if c.isalpha()}
+    unique_chars: set[str] = {c.lower() for c in "Hello World" if c.isalpha()}
 
     # Generator expression (lazy)
-    total = sum(x ** 2 for x in range(1_000_000))
+    total = sum(x**2 for x in range(1_000_000))
 
     print(f"Squares:    {squares}")
     print(f"Evens:      {evens}")
@@ -148,6 +152,7 @@ def demonstrate_comprehensions() -> None:
 # ---------------------------------------------------------------------------
 # 6. Generators and iterators
 # ---------------------------------------------------------------------------
+
 
 def fibonacci() -> Generator[int, None, None]:
     """Infinite Fibonacci sequence generator."""
@@ -173,6 +178,7 @@ def countdown(start: int) -> Generator[int, None, None]:
 # 7. Walrus operator and other modern syntax
 # ---------------------------------------------------------------------------
 
+
 def demonstrate_modern_syntax() -> None:
     """Python 3.8+ walrus operator and other idioms."""
     data = [1, 4, 9, 16, 25, 36]
@@ -195,6 +201,7 @@ def demonstrate_modern_syntax() -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Run all demonstrations."""

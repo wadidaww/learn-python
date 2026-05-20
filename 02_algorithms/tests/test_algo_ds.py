@@ -7,13 +7,6 @@ pytest tests for all data structure implementations in 02_algorithms.
 from __future__ import annotations
 
 import pytest
-
-from data_structures.hash_table import HashTable
-from data_structures.heap import MaxHeap, MinHeap, nlargest, nsmallest
-from data_structures.lru_cache import LRUCacheLinkedList, LRUCacheOrderedDict
-from data_structures.trie import Trie
-from algorithms.sorting import heapsort, mergesort, quicksort
-from algorithms.graph import bfs, bfs_shortest_path, dijkstra, topological_sort
 from algorithms.dynamic_programming import (
     coin_change,
     fibonacci_tabulation,
@@ -21,11 +14,17 @@ from algorithms.dynamic_programming import (
     lcs,
     lis_length,
 )
-
+from algorithms.graph import bfs, bfs_shortest_path, dijkstra, topological_sort
+from algorithms.sorting import heapsort, mergesort, quicksort
+from data_structures.hash_table import HashTable
+from data_structures.heap import MaxHeap, MinHeap, nlargest, nsmallest
+from data_structures.lru_cache import LRUCacheLinkedList, LRUCacheOrderedDict
+from data_structures.trie import Trie
 
 # ---------------------------------------------------------------------------
 # HashTable
 # ---------------------------------------------------------------------------
+
 
 class TestHashTable:
     def test_set_and_get(self) -> None:
@@ -72,6 +71,7 @@ class TestHashTable:
 # MinHeap / MaxHeap
 # ---------------------------------------------------------------------------
 
+
 class TestMinHeap:
     def test_push_pop(self) -> None:
         h: MinHeap[int] = MinHeap()
@@ -91,6 +91,7 @@ class TestMinHeap:
 
     def test_heap_sort(self) -> None:
         import random
+
         data = random.sample(range(100), 20)
         h = MinHeap.heapify(data)
         result = []
@@ -119,6 +120,7 @@ class TestMaxHeap:
 # ---------------------------------------------------------------------------
 # Trie
 # ---------------------------------------------------------------------------
+
 
 class TestTrie:
     def test_insert_search(self) -> None:
@@ -161,6 +163,7 @@ class TestTrie:
 # LRU Cache
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.parametrize("CacheClass", [LRUCacheOrderedDict, LRUCacheLinkedList])
 class TestLRUCache:
     def test_basic_get_put(self, CacheClass: type) -> None:
@@ -174,7 +177,7 @@ class TestLRUCache:
         cache = CacheClass(capacity=2)
         cache.put("a", 1)
         cache.put("b", 2)
-        cache.put("c", 3)   # evicts "a"
+        cache.put("c", 3)  # evicts "a"
         assert cache.get("a") is None
         assert cache.get("b") == 2
 
@@ -182,8 +185,8 @@ class TestLRUCache:
         cache = CacheClass(capacity=2)
         cache.put("a", 1)
         cache.put("b", 2)
-        cache.get("a")       # touch a → a is now MRU
-        cache.put("c", 3)    # evicts b (LRU)
+        cache.get("a")  # touch a → a is now MRU
+        cache.put("c", 3)  # evicts b (LRU)
         assert cache.get("a") == 1
         assert cache.get("b") is None
 
@@ -199,10 +202,12 @@ class TestLRUCache:
 # Sorting
 # ---------------------------------------------------------------------------
 
+
 class TestSorting:
     @pytest.mark.parametrize("fn", [quicksort, mergesort, heapsort])
     def test_sorts_correctly(self, fn: object) -> None:
         import random
+
         data = random.sample(range(1000), 50)
         assert fn(data) == sorted(data)  # type: ignore[operator]
 
@@ -222,6 +227,7 @@ class TestSorting:
 # ---------------------------------------------------------------------------
 # Graph algorithms
 # ---------------------------------------------------------------------------
+
 
 class TestGraph:
     UGRAPH = {
@@ -251,7 +257,7 @@ class TestGraph:
             "D": [],
         }
         dist, _ = dijkstra(wg, "A")
-        assert dist["D"] == 4   # A→B→C→D = 1+2+1
+        assert dist["D"] == 4  # A→B→C→D = 1+2+1
 
     def test_topological_sort(self) -> None:
         dag = {"A": ["C"], "B": ["C"], "C": []}
@@ -268,6 +274,7 @@ class TestGraph:
 # ---------------------------------------------------------------------------
 # Dynamic programming
 # ---------------------------------------------------------------------------
+
 
 class TestDynamicProgramming:
     def test_fibonacci(self) -> None:

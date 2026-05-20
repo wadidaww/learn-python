@@ -32,16 +32,17 @@ Task = Callable[[], None]
 # Scheduled job descriptor
 # ---------------------------------------------------------------------------
 
+
 @dataclass(order=True)
 class Job:
     """A scheduled job entry."""
 
-    next_run: float                        # Unix timestamp for next execution
-    func: Task       = field(compare=False)
-    name: str        = field(compare=False)
-    interval: float  = field(compare=False, default=0.0)   # 0 = one-shot
-    repeat: int      = field(compare=False, default=-1)     # -1 = forever
-    _run_count: int  = field(compare=False, default=0, repr=False)
+    next_run: float  # Unix timestamp for next execution
+    func: Task = field(compare=False)
+    name: str = field(compare=False)
+    interval: float = field(compare=False, default=0.0)  # 0 = one-shot
+    repeat: int = field(compare=False, default=-1)  # -1 = forever
+    _run_count: int = field(compare=False, default=0, repr=False)
 
     @property
     def is_recurring(self) -> bool:
@@ -65,6 +66,7 @@ class Job:
 # ---------------------------------------------------------------------------
 # Scheduler
 # ---------------------------------------------------------------------------
+
 
 class TaskScheduler:
     """
@@ -133,6 +135,7 @@ class TaskScheduler:
             repeat:   Maximum number of executions (-1 = unlimited).
             delay:    Initial delay before first run (default: 0).
         """
+
         def decorator(func: Task) -> Task:
             job = Job(
                 next_run=time.time() + delay,
@@ -143,6 +146,7 @@ class TaskScheduler:
             )
             self._add_job(job)
             return func
+
         return decorator
 
     def start(self) -> None:
@@ -194,9 +198,7 @@ class TaskScheduler:
         with self._lock:
             # Remove one-shot jobs that have run; keep recurring ones
             self._jobs = [
-                j for j in self._jobs
-                if j.is_recurring and j.should_repeat()
-                or j.next_run > now
+                j for j in self._jobs if j.is_recurring and j.should_repeat() or j.next_run > now
             ]
             self._jobs.sort()
 
@@ -204,6 +206,7 @@ class TaskScheduler:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate the task scheduler."""

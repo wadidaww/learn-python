@@ -20,10 +20,10 @@ import time
 from functools import lru_cache
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Subject code: slow vs fast implementations
 # ---------------------------------------------------------------------------
+
 
 def fibonacci_naive(n: int) -> int:
     """Exponential-time Fibonacci (intentionally slow)."""
@@ -78,6 +78,7 @@ def bubble_sort(arr: list[int]) -> list[int]:
 # Timing utilities
 # ---------------------------------------------------------------------------
 
+
 class Timer:
     """Context manager and decorator for measuring elapsed time."""
 
@@ -107,8 +108,8 @@ def benchmark(func: Any, *args: Any, repeat: int = 5) -> dict[str, float]:
         times.append(time.perf_counter() - start)
 
     return {
-        "min":  min(times) * 1000,
-        "max":  max(times) * 1000,
+        "min": min(times) * 1000,
+        "max": max(times) * 1000,
         "mean": sum(times) / len(times) * 1000,
     }
 
@@ -129,6 +130,7 @@ def profile_func(func: Any, *args: Any) -> str:
 # ---------------------------------------------------------------------------
 # Memory estimation (no external deps)
 # ---------------------------------------------------------------------------
+
 
 def estimate_size(obj: Any) -> int:
     """Recursively estimate memory usage of a Python object in bytes."""
@@ -152,6 +154,7 @@ def estimate_size(obj: Any) -> int:
 # ---------------------------------------------------------------------------
 # Profiling demonstration
 # ---------------------------------------------------------------------------
+
 
 def demo_fibonacci_comparison() -> None:
     """Compare naive vs cached vs iterative Fibonacci."""
@@ -196,9 +199,9 @@ def demo_memory_estimation() -> None:
     print("\n=== Memory Estimation ===")
     objects: list[tuple[str, Any]] = [
         ("list of 1000 ints", list(range(1000))),
-        ("dict 100 str→int",  {str(i): i for i in range(100)}),
-        ("set of 500 ints",   set(range(500))),
-        ("string 10k chars",  "x" * 10_000),
+        ("dict 100 str→int", {str(i): i for i in range(100)}),
+        ("set of 500 ints", set(range(500))),
+        ("string 10k chars", "x" * 10_000),
     ]
     for label, obj in objects:
         size = estimate_size(obj)

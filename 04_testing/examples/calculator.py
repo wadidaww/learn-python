@@ -14,13 +14,13 @@ from enum import Enum, auto
 
 
 class Operation(Enum):
-    ADD      = auto()
+    ADD = auto()
     SUBTRACT = auto()
     MULTIPLY = auto()
-    DIVIDE   = auto()
-    POWER    = auto()
-    SQRT     = auto()
-    MOD      = auto()
+    DIVIDE = auto()
+    POWER = auto()
+    SQRT = auto()
+    MOD = auto()
 
 
 class CalculatorError(Exception):
@@ -90,7 +90,7 @@ class Calculator:
 
     def power(self, base: float, exp: float) -> float:
         """Return base ** exp."""
-        result = base ** exp
+        result = base**exp
         self._record(Operation.POWER, (base, exp), result)
         return result
 

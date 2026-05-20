@@ -15,19 +15,19 @@ from typing import Any
 
 from task_queue.queue import TaskQueue, TaskState
 
-
 # ---------------------------------------------------------------------------
 # Worker
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class WorkerStats:
     """Runtime statistics for a single worker."""
 
-    worker_id:    int
-    tasks_done:   int = 0
+    worker_id: int
+    tasks_done: int = 0
     tasks_failed: int = 0
-    total_time:   float = 0.0
+    total_time: float = 0.0
 
     @property
     def avg_time(self) -> float:
@@ -42,10 +42,10 @@ class Worker:
 
     def __init__(self, worker_id: int, queue: TaskQueue) -> None:
         self.worker_id = worker_id
-        self._queue    = queue
-        self._running  = False
-        self._task:    asyncio.Task | None = None  # type: ignore[type-arg]
-        self.stats     = WorkerStats(worker_id=worker_id)
+        self._queue = queue
+        self._running = False
+        self._task: asyncio.Task | None = None  # type: ignore[type-arg]
+        self.stats = WorkerStats(worker_id=worker_id)
 
     async def _run(self) -> None:
         """Main worker loop."""
@@ -55,13 +55,13 @@ class Worker:
             except asyncio.TimeoutError:
                 continue
 
-            job.state   = TaskState.RUNNING
+            job.state = TaskState.RUNNING
             job.attempt += 1
             start = time.perf_counter()
 
             try:
-                job.result       = await job.func(*job.args, **job.kwargs)
-                job.state        = TaskState.DONE
+                job.result = await job.func(*job.args, **job.kwargs)
+                job.state = TaskState.DONE
                 job.completed_at = time.time()
                 self.stats.tasks_done += 1
             except Exception as exc:
@@ -98,6 +98,7 @@ class Worker:
 # Worker Pool
 # ---------------------------------------------------------------------------
 
+
 class WorkerPool:
     """
     Manages a pool of async workers draining a shared task queue.
@@ -118,10 +119,8 @@ class WorkerPool:
     """
 
     def __init__(self, workers: int = 4, queue: TaskQueue | None = None) -> None:
-        self.queue   = queue or TaskQueue()
-        self._workers: list[Worker] = [
-            Worker(i, self.queue) for i in range(workers)
-        ]
+        self.queue = queue or TaskQueue()
+        self._workers: list[Worker] = [Worker(i, self.queue) for i in range(workers)]
 
     async def start(self) -> None:
         """Start all workers."""
@@ -157,6 +156,7 @@ class WorkerPool:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 async def demo() -> None:
     """Demonstrate the worker pool."""

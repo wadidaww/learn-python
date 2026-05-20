@@ -30,10 +30,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Task definitions
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class ProcessingResult:
@@ -58,12 +58,15 @@ def simulate_io_task(url: str) -> ProcessingResult:
 
     if "error" in url:
         return ProcessingResult(
-            item_id=url, success=False,
-            value=None, elapsed=elapsed,
+            item_id=url,
+            success=False,
+            value=None,
+            elapsed=elapsed,
             error="Simulated network error",
         )
     return ProcessingResult(
-        item_id=url, success=True,
+        item_id=url,
+        success=True,
         value={"url": url, "status": 200, "bytes": random.randint(100, 5000)},
         elapsed=elapsed,
     )
@@ -98,10 +101,7 @@ def compute_file_hash(path: Path) -> ProcessingResult:
 def cpu_heavy_task(n: int) -> ProcessingResult:
     """CPU-bound task: count primes below n."""
     start = time.perf_counter()
-    count = sum(
-        1 for k in range(2, n)
-        if all(k % d != 0 for d in range(2, int(math.sqrt(k)) + 1))
-    )
+    count = sum(1 for k in range(2, n) if all(k % d != 0 for d in range(2, int(math.sqrt(k)) + 1)))
     return ProcessingResult(
         item_id=f"primes_below_{n}",
         success=True,
@@ -113,6 +113,7 @@ def cpu_heavy_task(n: int) -> ProcessingResult:
 # ---------------------------------------------------------------------------
 # Parallel processor
 # ---------------------------------------------------------------------------
+
 
 class ParallelProcessor:
     """
@@ -151,8 +152,10 @@ class ParallelProcessor:
                     result = future.result(timeout=5)
                 except Exception as exc:
                     result = ProcessingResult(
-                        item_id=task, success=False,
-                        value=None, elapsed=0,
+                        item_id=task,
+                        success=False,
+                        value=None,
+                        elapsed=0,
                         error=str(exc),
                     )
                 results.append(result)
@@ -195,6 +198,7 @@ class ParallelProcessor:
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Demonstrate parallel processing."""
     processor = ParallelProcessor(max_workers=8)
@@ -209,7 +213,7 @@ def main() -> None:
     elapsed = time.perf_counter() - start
 
     succeeded = sum(1 for r in io_results if r.success)
-    failed    = sum(1 for r in io_results if not r.success)
+    failed = sum(1 for r in io_results if not r.success)
     print(f"\n  {succeeded} succeeded, {failed} failed in {elapsed:.3f}s")
 
     # File hashing

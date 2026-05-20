@@ -7,10 +7,9 @@ URL router with path parameter extraction and method matching.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any
-
 
 Handler = Callable[..., Awaitable[Any]]
 
@@ -19,7 +18,7 @@ Handler = Callable[..., Awaitable[Any]]
 class Route:
     """A single registered route."""
 
-    method:  str
+    method: str
     pattern: re.Pattern[str]
     handler: Handler
     param_names: list[str]
@@ -92,16 +91,27 @@ class Router:
 
     def route(self, method: str, path: str) -> Callable[[Handler], Handler]:
         """Decorator to register a handler."""
+
         def decorator(fn: Handler) -> Handler:
             self.add_route(method, path, fn)
             return fn
+
         return decorator
 
-    def get(self, path: str)    -> Callable[[Handler], Handler]: return self.route("GET",    path)
-    def post(self, path: str)   -> Callable[[Handler], Handler]: return self.route("POST",   path)
-    def put(self, path: str)    -> Callable[[Handler], Handler]: return self.route("PUT",    path)
-    def delete(self, path: str) -> Callable[[Handler], Handler]: return self.route("DELETE", path)
-    def patch(self, path: str)  -> Callable[[Handler], Handler]: return self.route("PATCH",  path)
+    def get(self, path: str) -> Callable[[Handler], Handler]:
+        return self.route("GET", path)
+
+    def post(self, path: str) -> Callable[[Handler], Handler]:
+        return self.route("POST", path)
+
+    def put(self, path: str) -> Callable[[Handler], Handler]:
+        return self.route("PUT", path)
+
+    def delete(self, path: str) -> Callable[[Handler], Handler]:
+        return self.route("DELETE", path)
+
+    def patch(self, path: str) -> Callable[[Handler], Handler]:
+        return self.route("PATCH", path)
 
     # ------------------------------------------------------------------
     # Dispatch

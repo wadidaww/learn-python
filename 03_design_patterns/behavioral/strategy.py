@@ -15,10 +15,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Payment strategies
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class PaymentResult:
@@ -126,6 +126,7 @@ class ShoppingCart:
 # Sorting strategies
 # ---------------------------------------------------------------------------
 
+
 class SortStrategy(ABC):
     """Abstract sorting strategy."""
 
@@ -154,9 +155,9 @@ class QuickSortStrategy(SortStrategy):
         if len(data) <= 1:
             return list(data)
         pivot = data[len(data) // 2]
-        left   = [x for x in data if x < pivot]
+        left = [x for x in data if x < pivot]
         middle = [x for x in data if x == pivot]
-        right  = [x for x in data if x > pivot]
+        right = [x for x in data if x > pivot]
         return self.sort(left) + middle + self.sort(right)
 
 
@@ -189,6 +190,7 @@ class DataSorter:
 # Discount strategies
 # ---------------------------------------------------------------------------
 
+
 class DiscountStrategy(ABC):
     @abstractmethod
     def apply(self, price: float) -> float:
@@ -219,6 +221,7 @@ class FlatDiscount(DiscountStrategy):
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate strategy patterns."""

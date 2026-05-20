@@ -13,10 +13,10 @@ import heapq
 from collections import Counter, defaultdict, deque, namedtuple
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # 1. Lists
 # ---------------------------------------------------------------------------
+
 
 def demonstrate_lists() -> None:
     """Common list operations, slicing, and sorting."""
@@ -57,7 +57,7 @@ def demonstrate_tuples() -> None:
     print(f"Unpacked: x={x}, y={y}, z={z}")
 
     p = Point(3, 4)
-    distance = (p.x ** 2 + p.y ** 2) ** 0.5
+    distance = (p.x**2 + p.y**2) ** 0.5
     print(f"Point {p}, distance from origin: {distance:.2f}")
 
     # Tuple as dict key (hashable)
@@ -68,6 +68,7 @@ def demonstrate_tuples() -> None:
 # ---------------------------------------------------------------------------
 # 3. Dictionaries
 # ---------------------------------------------------------------------------
+
 
 def word_frequency(text: str) -> dict[str, int]:
     """Count word frequencies in *text* (case-insensitive)."""
@@ -107,10 +108,11 @@ def demonstrate_dicts() -> None:
 # 4. Sets
 # ---------------------------------------------------------------------------
 
+
 def demonstrate_sets() -> None:
     """Set operations: union, intersection, difference."""
     python_devs = {"Alice", "Bob", "Carol", "Dave"}
-    js_devs     = {"Bob", "Eve", "Frank", "Alice"}
+    js_devs = {"Bob", "Eve", "Frank", "Alice"}
 
     print("Both languages:    ", python_devs & js_devs)
     print("Either language:   ", python_devs | js_devs)
@@ -132,6 +134,7 @@ def demonstrate_sets() -> None:
 # 5. collections module
 # ---------------------------------------------------------------------------
 
+
 def demonstrate_collections() -> None:
     """Counter, deque, and heapq from the standard library."""
     # Counter
@@ -144,7 +147,7 @@ def demonstrate_collections() -> None:
     dq: deque[int] = deque([1, 2, 3], maxlen=5)
     dq.appendleft(0)
     dq.append(4)
-    dq.append(5)   # triggers maxlen eviction
+    dq.append(5)  # triggers maxlen eviction
     print("Deque:", dq)
 
     # heapq – priority queue
@@ -185,6 +188,7 @@ def low_stock(inventory: Inventory, threshold: int = 5) -> list[str]:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Run all data structure demonstrations."""

@@ -25,6 +25,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 # 1. Custom exception hierarchy
 # ---------------------------------------------------------------------------
 
+
 class AppError(Exception):
     """Base class for all application errors."""
 
@@ -64,6 +65,7 @@ class RateLimitError(AppError):
 # ---------------------------------------------------------------------------
 # 2. Context managers
 # ---------------------------------------------------------------------------
+
 
 class Timer:
     """Context manager that measures elapsed wall time."""
@@ -139,6 +141,7 @@ def managed_resource(name: str) -> Generator[dict[str, str], None, None]:
 # 3. Retry decorator
 # ---------------------------------------------------------------------------
 
+
 def retry(
     max_attempts: int = 3,
     delay: float = 0.1,
@@ -152,6 +155,7 @@ def retry(
         delay: Seconds to wait between retries.
         exceptions: Exception types that trigger a retry.
     """
+
     def decorator(func: F) -> F:
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             last_exc: BaseException | None = None
@@ -162,20 +166,26 @@ def retry(
                     last_exc = exc
                     logger.warning(
                         "Attempt %d/%d failed for %s: %s",
-                        attempt, max_attempts, func.__name__, exc,
+                        attempt,
+                        max_attempts,
+                        func.__name__,
+                        exc,
                     )
                     if attempt < max_attempts:
                         time.sleep(delay)
             raise RuntimeError(
                 f"All {max_attempts} attempts failed for {func.__name__}"
             ) from last_exc
+
         return wrapper  # type: ignore[return-value]
+
     return decorator
 
 
 # ---------------------------------------------------------------------------
 # 4. Result type pattern (no exceptions for control flow)
 # ---------------------------------------------------------------------------
+
 
 class Result[T]:
     """
@@ -232,6 +242,7 @@ def safe_divide(a: float, b: float) -> Result[float]:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate error handling patterns."""

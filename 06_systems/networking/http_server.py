@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger(__name__)
 
 HTTP_VERSION = "HTTP/1.1"
-BUFFER_SIZE  = 8192
+BUFFER_SIZE = 8192
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8080
 
@@ -36,6 +36,7 @@ DEFAULT_PORT = 8080
 # ---------------------------------------------------------------------------
 # Request / Response data types
 # ---------------------------------------------------------------------------
+
 
 class HTTPRequest:
     """Parsed HTTP request."""
@@ -50,11 +51,11 @@ class HTTPRequest:
         headers: dict[str, str],
         body: bytes,
     ) -> None:
-        self.method  = method
-        self.path    = path
+        self.method = method
+        self.path = path
         self.version = version
         self.headers = headers
-        self.body    = body
+        self.body = body
 
     @classmethod
     def parse(cls, raw: bytes) -> HTTPRequest | None:
@@ -85,17 +86,17 @@ class HTTPResponse:
         body: bytes = b"",
         headers: dict[str, str] | None = None,
     ) -> None:
-        self.status  = status
-        self.body    = body
+        self.status = status
+        self.body = body
         self.headers: dict[str, str] = headers or {}
 
     def to_bytes(self) -> bytes:
         """Serialise to wire format."""
         date = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
-        self.headers.setdefault("Date",           date)
-        self.headers.setdefault("Server",         "PythonHTTP/0.1")
+        self.headers.setdefault("Date", date)
+        self.headers.setdefault("Server", "PythonHTTP/0.1")
         self.headers.setdefault("Content-Length", str(len(self.body)))
-        self.headers.setdefault("Connection",     "close")
+        self.headers.setdefault("Connection", "close")
 
         status_line = f"{HTTP_VERSION} {self.status.value} {self.status.phrase}\r\n"
         header_lines = "".join(f"{k}: {v}\r\n" for k, v in self.headers.items())
@@ -117,9 +118,11 @@ class Router:
 
     def route(self, method: str, path: str) -> Any:
         """Decorator to register a handler for (method, path)."""
+
         def decorator(fn: Handler) -> Handler:
             self._routes[(method.upper(), path)] = fn
             return fn
+
         return decorator
 
     def dispatch(self, request: HTTPRequest) -> HTTPResponse:
@@ -148,6 +151,7 @@ class Router:
 # ---------------------------------------------------------------------------
 # Server
 # ---------------------------------------------------------------------------
+
 
 class HTTPServer:
     """
@@ -200,9 +204,7 @@ class HTTPServer:
                 conn, addr = self._sock.accept()
             except OSError:
                 break
-            t = threading.Thread(
-                target=self._handle, args=(conn, addr), daemon=True
-            )
+            t = threading.Thread(target=self._handle, args=(conn, addr), daemon=True)
             t.start()
 
     def _handle(self, conn: socket.socket, addr: tuple[str, int]) -> None:
@@ -232,6 +234,7 @@ class HTTPServer:
 # ---------------------------------------------------------------------------
 # Default application
 # ---------------------------------------------------------------------------
+
 
 def build_app(host: str = DEFAULT_HOST, port: int = DEFAULT_PORT) -> HTTPServer:
     """Create and configure a sample HTTP application."""
@@ -267,6 +270,7 @@ def build_app(host: str = DEFAULT_HOST, port: int = DEFAULT_PORT) -> HTTPServer:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Start the server, send test requests, then stop."""

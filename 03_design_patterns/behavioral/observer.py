@@ -21,6 +21,7 @@ T = TypeVar("T")
 # Classic Observer
 # ---------------------------------------------------------------------------
 
+
 class Observer(ABC, Generic[T]):
     """Abstract observer that receives typed updates."""
 
@@ -46,8 +47,7 @@ class Subject(Generic[T]):
     def unsubscribe(self, observer: Observer[T]) -> None:
         """Deregister *observer*."""
         self._observers = [
-            ref for ref in self._observers
-            if ref() is not None and ref() is not observer
+            ref for ref in self._observers if ref() is not None and ref() is not observer
         ]
 
     def notify(self, event: str, data: T) -> None:
@@ -66,6 +66,7 @@ class Subject(Generic[T]):
 # ---------------------------------------------------------------------------
 # Domain example: Stock price monitor
 # ---------------------------------------------------------------------------
+
 
 class StockSubject(Subject[float]):
     """Tracks a stock's price and notifies observers on change."""
@@ -130,9 +131,11 @@ class EventBus:
 
     def on(self, event: str) -> Callable[[Handler], Handler]:
         """Decorator to register a handler for *event*."""
+
         def decorator(fn: Handler) -> Handler:
             self._handlers[event].append(fn)
             return fn
+
         return decorator
 
     def subscribe(self, event: str, handler: Handler) -> None:
@@ -153,9 +156,11 @@ class EventBus:
 
     def once(self, event: str, handler: Handler) -> None:
         """Register *handler* to fire only once for *event*."""
+
         def wrapper(**kwargs: Any) -> None:
             self.unsubscribe(event, wrapper)
             handler(**kwargs)
+
         self.subscribe(event, wrapper)
 
     def handler_count(self, event: str) -> int:
@@ -166,6 +171,7 @@ class EventBus:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate observer patterns."""

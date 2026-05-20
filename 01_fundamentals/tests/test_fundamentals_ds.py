@@ -9,8 +9,6 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-import importlib.util
-
 import pytest
 
 # Modules starting with digits can't be imported directly – use importlib

@@ -17,13 +17,13 @@ import math
 from dataclasses import dataclass
 from typing import Any
 
-
 Vector = list[float]
 
 
 # ---------------------------------------------------------------------------
 # Classification metrics
 # ---------------------------------------------------------------------------
+
 
 def accuracy(y_true: Vector, y_pred: Vector) -> float:
     """Fraction of correct predictions."""
@@ -69,8 +69,8 @@ def precision_recall_f1(
     fn = sum(1 for t, p in zip(y_true, y_pred) if t == positive_class and p != positive_class)
 
     prec = tp / (tp + fp) if tp + fp > 0 else 0.0
-    rec  = tp / (tp + fn) if tp + fn > 0 else 0.0
-    f1   = 2 * prec * rec / (prec + rec) if prec + rec > 0 else 0.0
+    rec = tp / (tp + fn) if tp + fn > 0 else 0.0
+    f1 = 2 * prec * rec / (prec + rec) if prec + rec > 0 else 0.0
 
     return prec, rec, f1
 
@@ -91,31 +91,31 @@ def classification_report(
         p, r, f = precision_recall_f1(y_true, y_pred, positive_class=lbl)
         report[str(lbl)] = {
             "precision": round(p, 4),
-            "recall":    round(r, 4),
-            "f1":        round(f, 4),
-            "support":   support[lbl],
+            "recall": round(r, 4),
+            "f1": round(f, 4),
+            "support": support[lbl],
         }
 
     # Macro average
     macro_p = sum(report[str(l)]["precision"] for l in labels) / len(labels)
-    macro_r = sum(report[str(l)]["recall"]    for l in labels) / len(labels)
-    macro_f = sum(report[str(l)]["f1"]        for l in labels) / len(labels)
+    macro_r = sum(report[str(l)]["recall"] for l in labels) / len(labels)
+    macro_f = sum(report[str(l)]["f1"] for l in labels) / len(labels)
     report["macro avg"] = {
         "precision": round(macro_p, 4),
-        "recall":    round(macro_r, 4),
-        "f1":        round(macro_f, 4),
-        "support":   total,
+        "recall": round(macro_r, 4),
+        "f1": round(macro_f, 4),
+        "support": total,
     }
 
     # Weighted average
     w_p = sum(report[str(l)]["precision"] * support[l] for l in labels) / total
-    w_r = sum(report[str(l)]["recall"]    * support[l] for l in labels) / total
-    w_f = sum(report[str(l)]["f1"]        * support[l] for l in labels) / total
+    w_r = sum(report[str(l)]["recall"] * support[l] for l in labels) / total
+    w_f = sum(report[str(l)]["f1"] * support[l] for l in labels) / total
     report["weighted avg"] = {
         "precision": round(w_p, 4),
-        "recall":    round(w_r, 4),
-        "f1":        round(w_f, 4),
-        "support":   total,
+        "recall": round(w_r, 4),
+        "f1": round(w_f, 4),
+        "support": total,
     }
 
     return report
@@ -124,6 +124,7 @@ def classification_report(
 # ---------------------------------------------------------------------------
 # ROC AUC
 # ---------------------------------------------------------------------------
+
 
 def roc_auc(y_true: Vector, y_score: Vector) -> float:
     """
@@ -166,6 +167,7 @@ def roc_auc(y_true: Vector, y_score: Vector) -> float:
 # Regression metrics
 # ---------------------------------------------------------------------------
 
+
 def mean_absolute_error(y_true: Vector, y_pred: Vector) -> float:
     """Mean Absolute Error."""
     return sum(abs(t - p) for t, p in zip(y_true, y_pred)) / len(y_true)
@@ -197,6 +199,7 @@ def r2_score(y_true: Vector, y_pred: Vector) -> float:
 # Pretty print
 # ---------------------------------------------------------------------------
 
+
 def print_classification_report(report: dict[str, dict[str, float]]) -> None:
     """Print a formatted classification report."""
     header = f"{'':>15}  {'precision':>10}  {'recall':>8}  {'f1':>8}  {'support':>8}"
@@ -213,6 +216,7 @@ def print_classification_report(report: dict[str, dict[str, float]]) -> None:
 # ---------------------------------------------------------------------------
 # Demo
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Demonstrate evaluation metrics."""
@@ -233,7 +237,7 @@ def main() -> None:
 
     print("\nRegression Metrics:")
     y_reg_true: Vector = [3.0, -0.5, 2.0, 7.0]
-    y_reg_pred: Vector = [2.5, 0.0,  2.0, 8.0]
+    y_reg_pred: Vector = [2.5, 0.0, 2.0, 8.0]
     print(f"  MAE:  {mean_absolute_error(y_reg_true, y_reg_pred):.4f}")
     print(f"  RMSE: {root_mean_squared_error(y_reg_true, y_reg_pred):.4f}")
     print(f"  R²:   {r2_score(y_reg_true, y_reg_pred):.4f}")

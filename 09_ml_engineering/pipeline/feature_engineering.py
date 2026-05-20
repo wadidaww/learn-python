@@ -13,7 +13,6 @@ from abc import ABC, abstractmethod
 from collections import Counter
 from typing import Any
 
-
 Vector = list[float]
 Matrix = list[Vector]
 Dataset = list[dict[str, Any]]
@@ -22,6 +21,7 @@ Dataset = list[dict[str, Any]]
 # ---------------------------------------------------------------------------
 # Base transformer
 # ---------------------------------------------------------------------------
+
 
 class FeatureTransformer(ABC):
     """Abstract feature transformer that fits on training data and transforms."""
@@ -42,6 +42,7 @@ class FeatureTransformer(ABC):
 # ---------------------------------------------------------------------------
 # Min-Max Scaler
 # ---------------------------------------------------------------------------
+
 
 class MinMaxScaler(FeatureTransformer):
     """
@@ -85,6 +86,7 @@ class MinMaxScaler(FeatureTransformer):
 # Standard Scaler (Z-score)
 # ---------------------------------------------------------------------------
 
+
 class StandardScaler(FeatureTransformer):
     """
     Standardise numeric features to zero mean and unit variance.
@@ -102,7 +104,7 @@ class StandardScaler(FeatureTransformer):
                 self._mean[col], self._std[col] = 0.0, 1.0
             else:
                 self._mean[col] = statistics.mean(values)
-                self._std[col]  = statistics.stdev(values) if len(values) > 1 else 1.0
+                self._std[col] = statistics.stdev(values) if len(values) > 1 else 1.0
                 if self._std[col] == 0:
                     self._std[col] = 1.0
         return self
@@ -121,6 +123,7 @@ class StandardScaler(FeatureTransformer):
 # ---------------------------------------------------------------------------
 # One-Hot Encoder
 # ---------------------------------------------------------------------------
+
 
 class OneHotEncoder(FeatureTransformer):
     """
@@ -156,6 +159,7 @@ class OneHotEncoder(FeatureTransformer):
 # Label Encoder
 # ---------------------------------------------------------------------------
 
+
 class LabelEncoder:
     """Encode a target column as integer class labels."""
 
@@ -184,6 +188,7 @@ class LabelEncoder:
 # Feature selector (variance threshold)
 # ---------------------------------------------------------------------------
 
+
 class VarianceThresholdSelector(FeatureTransformer):
     """
     Remove features with variance below *threshold*.
@@ -210,8 +215,13 @@ class VarianceThresholdSelector(FeatureTransformer):
         all_cols_to_keep = self._selected
         result: Dataset = []
         for row in data:
-            result.append({k: v for k, v in row.items()
-                           if k not in self.numeric_cols or k in all_cols_to_keep})
+            result.append(
+                {
+                    k: v
+                    for k, v in row.items()
+                    if k not in self.numeric_cols or k in all_cols_to_keep
+                }
+            )
         return result
 
     @property
@@ -222,6 +232,7 @@ class VarianceThresholdSelector(FeatureTransformer):
 # ---------------------------------------------------------------------------
 # Feature extraction to matrix
 # ---------------------------------------------------------------------------
+
 
 def to_feature_matrix(
     data: Dataset,

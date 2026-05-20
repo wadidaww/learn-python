@@ -200,9 +200,11 @@ def nsmallest(n: int, data: list[T]) -> list[T]:
 # Demo
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Demonstrate heap usage."""
     import random
+
     data = random.sample(range(100), 20)
     print("Data:     ", data)
 

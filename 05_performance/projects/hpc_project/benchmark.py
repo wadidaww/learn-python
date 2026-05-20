@@ -26,7 +26,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Data structures
 # ---------------------------------------------------------------------------
@@ -165,7 +164,9 @@ def compare(
     Returns:
         List of :class:`BenchResult` sorted fastest-first.
     """
-    labels = list(names) if names else [getattr(f, "__name__", f"fn_{i}") for i, f in enumerate(fns)]
+    labels = (
+        list(names) if names else [getattr(f, "__name__", f"fn_{i}") for i, f in enumerate(fns)]
+    )
     results: list[BenchResult] = [
         measure(fn, name=label, iterations=iterations, warmup=warmup)
         for fn, label in zip(fns, labels)

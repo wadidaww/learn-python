@@ -29,7 +29,6 @@ import time
 from multiprocessing.shared_memory import SharedMemory
 from typing import NamedTuple
 
-
 # ---------------------------------------------------------------------------
 # Matrix helpers
 # ---------------------------------------------------------------------------

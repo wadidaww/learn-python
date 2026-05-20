@@ -163,7 +163,7 @@ def sliding_sum_array(data: array.array, window: int) -> array.array:  # type: i
     """
     n = len(data)
     result: array.array = array.array("d", [0.0] * (n - window + 1))  # type: ignore[type-arg]
-    mv_in = memoryview(data)   # already 'd' (float64) format
+    mv_in = memoryview(data)  # already 'd' (float64) format
     mv_out = memoryview(result)
 
     total = math.fsum(mv_in[:window])
